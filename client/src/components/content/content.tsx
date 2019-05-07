@@ -6,7 +6,7 @@ export default class Content extends React.Component{
         return(
             <div className="uk-container">
                 <hr></hr>
-                <h4>Choose your genre</h4>
+                <p className="uk-text-large">Choose your genre</p>
                 <Categorys/>
             </div>
         )
