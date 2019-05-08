@@ -32,12 +32,6 @@ export default class Header extends React.Component {
                     <li className="uk-navbar-item">
                         <a href="#"><span uk-icon="cart"/> Cart <span className="uk-badge">4</span></a>
                     </li>
-                    <li className="">
-                        <a href="#"><span className="fas fa-sign-out-alt"/>Sign In</a>
-                    </li>
-                    <li className="">
-                        <a href="#"><span className="fas fa-sign-out-alt"/>Sign Up</a>
-                    </li>
                 </ul>
             </div>
         </nav>
