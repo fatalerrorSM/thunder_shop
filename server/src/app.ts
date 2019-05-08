@@ -50,12 +50,16 @@ app.use(session({
     })
 }));
 
+
+// Access to css,images,and other files
+app.use('/static',express.static(__dirname + '/public'));
 /*
  * Primary app routes
  */
 
-// Default Zone (entry point for test app)
+// Default Zone (entry point)
 app.get("/", homeController.index);
+app.post('/', homeController.postSignIn);
 
 // Categories Zone
 app.get("/categories", categoriesController.getAllcategories);
