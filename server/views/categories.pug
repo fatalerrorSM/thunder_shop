@@ -1,0 +1,63 @@
+extends layout/layout
+
+
+block content
+    include common/header
+    
+    div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-padding-large.uk-padding-remove-bottom
+        table.uk-table.uk-table-hover.uk-table-divider  
+            thead
+                tr
+                    th="Category ID"
+                    th="Name"
+                    th="Category Image"
+            tbody
+            case st 
+                when false
+                    p=err
+                when true
+                    each category in data
+                        tr
+                        each value in category
+                            td=value
+    
+    div.uk-container.uk-padding-large
+        p="Click on category ID"
+        form(method="post" uk-grid).uk-grid-small
+            div.uk-width-1-1
+                legend="ID"
+                input(type="text" name="id" id="input-id" disabled).uk-input
+            div.uk-width-1-2
+                legend="Name"
+                input(type="text" name="name" id="input-name").uk-input
+            div.uk-width-1-2
+                legend="Image"
+                input(type="text" name="image" id="input-image").uk-input
+            div.uk-child-width-auto.uk-margin
+                label
+                    input(type="radio", id="radio-Add" name="radio" value="add-radio").uk-radio
+                | Add
+                label.uk-margin-left  
+                    input(type="radio",id="radio-Update", name="radio" value="update-radio").uk-radio
+                | Update
+                label.uk-margin-left
+                    input(type="radio", id="radio-Delete",name="radio" value="delete-radio").uk-radio
+                | Delete
+            div.uk-width-1-1
+                input(type="submit", value="Submit").uk-input
+
+    script.
+        $("table tbody").find("td").click(function(){
+            var id = $(this).text();
+            if(id.length == 24 && id[0]==5){
+                $.ajax({url: `http://localhost:5000/categories/${id}`,success : function(res){
+                    jQ_append("input-id",id);
+                    jQ_append("input-name",res.name);
+                    jQ_append("input-image",res.image);
+                }})
+            }
+        })
+        function jQ_append(id_of_input, text){
+            var input_id = '#'+id_of_input;
+            $(input_id).val(text);
+        }
