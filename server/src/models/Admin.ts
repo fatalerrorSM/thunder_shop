@@ -15,6 +15,15 @@ export type AdminModel = mongoose.Document & {
     adress: string;
     city_code: number;
   };
+  verifyPassword : verifyPassword
+};
+
+type verifyPassword = (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void;
+
+const verifyPassword : verifyPassword = function (this : AdminModel,candidatePassword, cb) {
+  bcrypt.compare(candidatePassword, this.password, (err: mongoose.Error, isMatch: boolean) => {
+    cb(err, isMatch);
+  });
 };
 
 const adminSchema: Schema = new Schema(
@@ -36,6 +45,7 @@ const adminSchema: Schema = new Schema(
 );
 
 adminSchema.pre<IAdmin>("save", function save(next) {
+  console.log("asd");
   const user = this;
   if (!user.isModified("password")) {
     return next();
@@ -54,5 +64,8 @@ adminSchema.pre<IAdmin>("save", function save(next) {
   });
 });
 
+adminSchema.methods.verifyPassword = verifyPassword;
 
-export const Admin = mongoose.model<IAdmin>("User", adminSchema);
+const Admin = mongoose.model<AdminModel>("Admin", adminSchema);
+
+export default Admin;
