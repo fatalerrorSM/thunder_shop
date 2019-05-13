@@ -1,0 +1,33 @@
+nav(uk-navbar="true").uk-navbar-container
+            div.uk-navbar-left
+                ul.uk-navbar-nav
+                    li
+                        a(type="button" uk-toggle="target: #offcanvas-nav-primary")
+                            span(uk-icon="menu")
+                            
+                                div(uk-offcanvas="overlay: true")#offcanvas-nav-primary
+                                    div.uk-offcanvas-bar.uk-flex.uk-flex-column
+                                        ul.uk-nav.uk-nav-primary.uk-nav-center.uk-margin-auto-vertical
+                                            li.uk-active
+                                                a(href="/admin")="Home"
+                                            li.uk-nav-divider
+                                            li.uk-active
+                                                a(href="/admin/categories")="Categories"
+                                            li.uk-active
+                                                a(href="/admin/items")="Items"
+                                            li.uk-active
+                                                a(href="/admin/manage")="Admins"
+                                            li.uk-nav-divider
+                                            li.uk-active
+                                                a(href="/admin/dashboard")="Dashboard"
+                    li
+            div.uk-navbar-center
+                span.uk-navbar-item.uk-logo
+                    | Thunder
+                    span(uk-icon="bolt")
+                    | Shop
+            div.uk-navbar-right
+                ul.uk-navbar-nav
+                    li.uk-navbar-item
+                        a(href="/logout")
+                            span(uk-icon="sign-out")
