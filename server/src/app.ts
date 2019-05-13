@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
+import passport from "passport";
 import dotenv from "dotenv";
 import expressValidator from "express-validator";
 import path from "path";
@@ -10,6 +11,7 @@ import {MONGODB_URI,SESSION_SECRET} from "./utils/secrets";
 //Controllers (route handlers)
 import * as homeController from "./controllers/home";
 import * as categoriesController from "./controllers/category";
+import * as adminController from "./controllers/admin";
 
 const MongoStore = mongo(session);
 
@@ -20,6 +22,9 @@ const app = express();
 const mongoUrl : string | any = MONGODB_URI;
 
 const session_secret : string | any = SESSION_SECRET;
+
+// API keys and Passport configuration
+import * as passportConfig from "./config/passport";
 
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true,useCreateIndex: true, useFindAndModify: false  })
@@ -49,13 +54,16 @@ app.use(session({
       autoReconnect: true
     })
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Access to css,images,and other files
-app.use('/static',express.static(__dirname + '/public'));
+app.use('/admin/static',express.static(__dirname + '/public'));
+
 /*
  * Primary app routes
- */
+*/
 
 // Default Zone (entry point)
 app.get("/", homeController.index);
@@ -67,5 +75,20 @@ app.get('/categories/:id',categoriesController.getCategory);
 app.post("/categories", categoriesController.addCategory);
 app.put("/categories/:id",categoriesController.updateCategory);
 app.delete("/categories/:id", categoriesController.deleteCategory);
+
+// Admin Zone 
+
+app.get("/admin",passportConfig.isAuthenticated,adminController.getAdmin);
+app.get('/logout',adminController.logout);
+
+app.get('/admin/manage',passportConfig.isAuthenticated,adminController.getManage);
+app.post("/admin/manage",passportConfig.isAuthenticated,adminController.postAdmin);
+
+app.get('/admin/categories',passportConfig.isAuthenticated,adminController.getCategories);
+app.post('/admin/categories',passportConfig.isAuthenticated,adminController.postCategories);
+
+app.get('/admin/items',passportConfig.isAuthenticated,adminController.getItems);
+
+app.get('/admin/dashboard',passportConfig.isAuthenticated,adminController.getDashboard);
 
 export default app;
