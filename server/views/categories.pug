@@ -4,7 +4,12 @@ extends layout/layout
 block content
     include common/header
     
+    div.uk-section.uk-section-secondary
+        div.uk-container
+            h3.uk-text-center="Categories"
+
     div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-padding-large.uk-padding-remove-bottom
+        button.uk-button#reload="Refresh"
         table.uk-table.uk-table-hover.uk-table-divider  
             thead
                 tr
@@ -22,11 +27,11 @@ block content
                             td=value
     
     div.uk-container.uk-padding-large
-        p="Click on category ID"
+        p="For Add/Delete/Update an category click on category ID"
         form(method="post" uk-grid).uk-grid-small
             div.uk-width-1-1
                 legend="ID"
-                input(type="text" name="id" id="input-id" disabled).uk-input
+                input(type="text" name="id" id="input-id").uk-input
             div.uk-width-1-2
                 legend="Name"
                 input(type="text" name="name" id="input-name").uk-input
@@ -45,7 +50,15 @@ block content
                 | Delete
             div.uk-width-1-1
                 input(type="submit", value="Submit").uk-input
-
+        case st
+            when false
+                div(uk-alert).uk-alert-danger
+                    a(uk-close).uk-alert-close
+                    p=error
+            when true
+                div(uk-alert).uk-alert-success
+                    a(uk-close).uk-alert-close
+                    p=msg
     script.
         $("table tbody").find("td").click(function(){
             var id = $(this).text();
@@ -61,3 +74,6 @@ block content
             var input_id = '#'+id_of_input;
             $(input_id).val(text);
         }
+        $("#reload").click(function(){
+            window.location.reload();
+        })
