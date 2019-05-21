@@ -23,11 +23,10 @@ export let postSignIn = (req: Request, res: Response,next : NextFunction) => {
 
   if (errors) {
     console.log("errors", errors);
-    res.render("home",{
+    return res.render("home",{
       st : false,
       msg : "User name or password incorrect"
     })
-    return res.redirect("/");
   }
 
   passport.authenticate("local", (err: Error, user: AdminModel, info: IVerifyOptions) => {

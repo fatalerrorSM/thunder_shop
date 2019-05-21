@@ -21,11 +21,10 @@ exports.postSignIn = (req, res, next) => {
     const errors = req.validationErrors();
     if (errors) {
         console.log("errors", errors);
-        res.render("home", {
+        return res.render("home", {
             st: false,
             msg: "User name or password incorrect"
         });
-        return res.redirect("/");
     }
     passport_1.default.authenticate("local", (err, user, info) => {
         if (err) {
