@@ -15,7 +15,7 @@ export type ItemModel = mongoose.Document & {
   }
   age_rating: string,
   OS: string,
-  images: {
+  image: {
     image_url: string
   },
   description: string,
