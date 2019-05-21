@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Admin_1 = __importDefault(require("../models/Admin"));
 const Category_1 = require("../models/Category");
+const Item_1 = __importDefault(require("../models/Item"));
 const pug_1 = require("pug");
 const got_1 = __importDefault(require("got"));
 exports.getAdmin = (req, res) => {
@@ -95,7 +96,9 @@ exports.postCategories = (req, res) => {
                         image: req.body.image
                     })
                 };
-                got_1.default.put(`${process.env.LOCAL_URL}/categories/${req.body.id}`, options).then(response => {
+                got_1.default
+                    .put(`${process.env.LOCAL_URL}/categories/${req.body.id}`, options)
+                    .then(response => {
                     if (response.statusCode === 200) {
                         return res.redirect("categories");
                     }
@@ -106,7 +109,8 @@ exports.postCategories = (req, res) => {
                             error: response.statusMessage
                         });
                     }
-                }).catch((err) => {
+                })
+                    .catch((err) => {
                     console.error(err.message);
                 });
             }
@@ -121,7 +125,9 @@ exports.postCategories = (req, res) => {
         }
         case "delete-radio": {
             if (req.body.id) {
-                got_1.default.delete(`${process.env.LOCAL_URL}/categories/${req.body.id}`).then(response => {
+                got_1.default
+                    .delete(`${process.env.LOCAL_URL}/categories/${req.body.id}`)
+                    .then(response => {
                     if (response.statusCode === 200) {
                         return res.redirect("categories");
                     }
@@ -132,7 +138,8 @@ exports.postCategories = (req, res) => {
                             error: "Something goes wrong try again"
                         });
                     }
-                }).catch((err) => {
+                })
+                    .catch((err) => {
                     console.error(err.message);
                 });
             }
@@ -141,11 +148,6 @@ exports.postCategories = (req, res) => {
         default:
             break;
     }
-};
-exports.getItems = (req, res) => {
-    res.render("items", {
-        title: "items"
-    });
 };
 exports.getManage = (req, res) => {
     res.render("manage", {
@@ -319,4 +321,32 @@ exports.updateCategory = (req, res) => {
             }
         });
     }
+};
+exports.getItems = (req, res) => {
+    const cursor = Item_1.default.find({});
+    let formatResult = [];
+    cursor.then(items => {
+        if (!items) {
+            res.render("items", {
+                st: false,
+                title: "items",
+                err: "Items can't be downloaded,please,ask your system administrator or try agait later"
+            });
+        }
+        else {
+            let formatRes = [];
+            items.forEach(item => {
+                let obj = {
+                    id: item._id,
+                    name: item.name
+                };
+                formatRes.push(obj);
+            });
+            res.render("items", {
+                st: true,
+                title: "items",
+                data: formatRes
+            });
+        }
+    });
 };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, response } from "express";
 import { default as Admin } from "../models/Admin";
 import { Category } from "../models/Category";
+import { default as Item } from "../models/Item";
 import { render } from "pug";
 import got from "got";
 
@@ -87,9 +88,9 @@ export let postCategories = (req: Request, res: Response) => {
         });
       break;
     }
-    case "update-radio":{
+    case "update-radio": {
       console.log(req.body.id);
-      if(req.body.id){
+      if (req.body.id) {
         const options = {
           headers: {
             "Content-type": "application/json"
@@ -99,55 +100,56 @@ export let postCategories = (req: Request, res: Response) => {
             image: req.body.image
           })
         };
-        got.put(`${process.env.LOCAL_URL}/categories/${req.body.id}`,options).then(response => {
-          if(response.statusCode === 200){
-            return res.redirect("categories");
-          }else{
-            return render("categories",{
-              st:false,
-              title : "categories",
-              error : response.statusMessage
-            })
-          }
-        }).catch((err : Error) => {
-          console.error(err.message);
-        })
-      }else{
-        res.render("categories",{
-          st:false,
-          title : "categories",
+        got
+          .put(`${process.env.LOCAL_URL}/categories/${req.body.id}`, options)
+          .then(response => {
+            if (response.statusCode === 200) {
+              return res.redirect("categories");
+            } else {
+              return render("categories", {
+                st: false,
+                title: "categories",
+                error: response.statusMessage
+              });
+            }
+          })
+          .catch((err: Error) => {
+            console.error(err.message);
+          });
+      } else {
+        res.render("categories", {
+          st: false,
+          title: "categories",
           error: "ID is not selected"
-        })
+        });
       }
       break;
     }
-    case "delete-radio":{
-      if(req.body.id){
-        got.delete(`${process.env.LOCAL_URL}/categories/${req.body.id}`).then(response =>{
-          if(response.statusCode === 200){
-            return res.redirect("categories");
-          }else{
-            res.render("categories",{
-              st:false,
-              title : "categories",
-              error: "Something goes wrong try again"
-            })
-          }
-        }).catch((err : Error) =>{
-          console.error(err.message);
-        })
+    case "delete-radio": {
+      if (req.body.id) {
+        got
+          .delete(`${process.env.LOCAL_URL}/categories/${req.body.id}`)
+          .then(response => {
+            if (response.statusCode === 200) {
+              return res.redirect("categories");
+            } else {
+              res.render("categories", {
+                st: false,
+                title: "categories",
+                error: "Something goes wrong try again"
+              });
+            }
+          })
+          .catch((err: Error) => {
+            console.error(err.message);
+          });
       }
-      break;}
+      break;
+    }
 
     default:
       break;
   }
-};
-
-export let getItems = (req: Request, res: Response) => {
-  res.render("items", {
-    title: "items"
-  });
 };
 
 export let getManage = (req: Request, res: Response) => {
@@ -342,4 +344,33 @@ export let updateCategory = (req: Request, res: Response) => {
       }
     });
   }
+};
+
+export let getItems = (req: Request, res: Response) => {
+  const cursor = Item.find({});
+  cursor.then(items => {
+    if (!items) {
+      res.render("items", {
+        st: false,
+        title: "items",
+        err:
+          "Items can't be downloaded,please,ask your system administrator or try agait later"
+      });
+    } else {
+      let formatRes: any = [];
+      items.forEach(item => {
+        let obj = {
+          id: item._id,
+          name: item.name
+        };
+        formatRes.push(obj);
+      });
+
+      res.render("items", {
+        st: true,
+        title: "items",
+        data: formatRes
+      });
+    }
+  });
 };
