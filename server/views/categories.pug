@@ -50,15 +50,6 @@ block content
                 | Delete
             div.uk-width-1-1
                 input(type="submit", value="Submit").uk-input
-        case st
-            when false
-                div(uk-alert).uk-alert-danger
-                    a(uk-close).uk-alert-close
-                    p=error
-            when true
-                div(uk-alert).uk-alert-success
-                    a(uk-close).uk-alert-close
-                    p=msg
     script.
         $("table tbody").find("td").click(function(){
             var id = $(this).text();
