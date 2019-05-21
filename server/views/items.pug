@@ -2,4 +2,24 @@ extends layout/layout
 
 block content
     include common/header
-    h1="Items"
+    
+    button.uk-button#reload="Refresh"
+    div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-padding-large.uk-padding-remove-bottom
+        table.uk-table.uk-table-hover.uk-table-divider  
+            thead
+                tr
+                    th="Item ID"
+                    th="Name"
+            tbody
+            case st 
+                when false
+                    p=err
+                when true
+                    each item in data
+                        tr
+                        each value in item
+                            td=value
+    script. 
+        $("#reload").click(function(){
+            window.location.reload();
+        })
