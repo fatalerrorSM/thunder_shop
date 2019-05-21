@@ -45,7 +45,6 @@ const adminSchema: Schema = new Schema(
 );
 
 adminSchema.pre<IAdmin>("save", function save(next) {
-  console.log("asd");
   const user = this;
   if (!user.isModified("password")) {
     return next();
