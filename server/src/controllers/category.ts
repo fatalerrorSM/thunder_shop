@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Category, CategoryModel } from "../models/Category";
-import { ObjectID } from "bson";
+
 const request = require("express-validator");
 
 export let getAllcategories = (req: Request, res: Response) => {
