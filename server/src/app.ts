@@ -12,7 +12,7 @@ import {MONGODB_URI,SESSION_SECRET} from "./utils/secrets";
 import * as homeController from "./controllers/home";
 import * as categoriesController from "./controllers/category";
 import * as adminController from "./controllers/admin";
-
+import * as itemController from "./controllers/item";
 const MongoStore = mongo(session);
 
 //Create Express server
@@ -38,7 +38,7 @@ mongoose
     // process.exit();
   });
 
-//Express configuration
+//Express middleware configuration
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
@@ -76,9 +76,17 @@ app.post("/categories", categoriesController.addCategory);
 app.put("/categories/:id",categoriesController.updateCategory);
 app.delete("/categories/:id", categoriesController.deleteCategory);
 
+// Items Zone
+app.get("/items",itemController.getAllItems);
+app.get("/item/:id",itemController.getItem);
+app.post("/item",itemController.addItem);
+app.delete("/item/:id",itemController.deleteItem);
+app.put("/item/:id",itemController.updateItem);
+
 // Admin Zone 
 
 app.get("/admin",passportConfig.isAuthenticated,adminController.getAdmin);
+app.post("/admin",adminController.postAdmin);
 app.get('/logout',adminController.logout);
 
 app.get('/admin/manage',passportConfig.isAuthenticated,adminController.getManage);

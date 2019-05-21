@@ -23,6 +23,7 @@ const secrets_1 = require("./utils/secrets");
 const homeController = __importStar(require("./controllers/home"));
 const categoriesController = __importStar(require("./controllers/category"));
 const adminController = __importStar(require("./controllers/admin"));
+const itemController = __importStar(require("./controllers/item"));
 const MongoStore = connect_mongo_1.default(express_session_1.default);
 //Create Express server
 const app = express_1.default();
@@ -40,7 +41,7 @@ mongoose_1.default
     console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
     // process.exit();
 });
-//Express configuration
+//Express middleware configuration
 app.set("port", process.env.PORT || 3000);
 app.set("views", path_1.default.join(__dirname, "../views"));
 app.set("view engine", "pug");
@@ -72,8 +73,15 @@ app.get('/categories/:id', categoriesController.getCategory);
 app.post("/categories", categoriesController.addCategory);
 app.put("/categories/:id", categoriesController.updateCategory);
 app.delete("/categories/:id", categoriesController.deleteCategory);
+// Items Zone
+app.get("/items", itemController.getAllItems);
+app.get("/item/:id", itemController.getItem);
+app.post("/item", itemController.addItem);
+app.delete("/item/:id", itemController.deleteItem);
+app.put("/item/:id", itemController.updateItem);
 // Admin Zone 
 app.get("/admin", passportConfig.isAuthenticated, adminController.getAdmin);
+app.post("/admin", adminController.postAdmin);
 app.get('/logout', adminController.logout);
 app.get('/admin/manage', passportConfig.isAuthenticated, adminController.getManage);
 app.post("/admin/manage", passportConfig.isAuthenticated, adminController.postAdmin);
