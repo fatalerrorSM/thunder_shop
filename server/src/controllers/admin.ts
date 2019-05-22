@@ -348,29 +348,42 @@ export let updateCategory = (req: Request, res: Response) => {
 
 export let getItems = (req: Request, res: Response) => {
   const cursor = Item.find({});
+  const categoryCursor = Category.find({});
   cursor.then(items => {
-    if (!items) {
-      res.render("items", {
-        st: false,
-        title: "items",
-        err:
-          "Items can't be downloaded,please,ask your system administrator or try agait later"
-      });
-    } else {
-      let formatRes: any = [];
-      items.forEach(item => {
-        let obj = {
-          id: item._id,
-          name: item.name
-        };
-        formatRes.push(obj);
-      });
-
-      res.render("items", {
-        st: true,
-        title: "items",
-        data: formatRes
-      });
-    }
+    categoryCursor.then(categories => {
+      if (!items && !categories) {
+        res.render("items", {
+          st: false,
+          title: "items",
+          err:
+            "Items and Categories can't be downloaded,please,ask your system administrator or try agait later"
+        });
+      } else {
+        let formatRes: any = [];
+        let categoryNames : any = [];
+        items.forEach(item => {
+          let obj = {
+            id: item._id,
+            name: item.name
+          };
+          formatRes.push(obj);
+        });
+        
+        categories.forEach(category => {
+          categoryNames.push(category.name);
+        })
+  
+        res.render("items", {
+          st: true,
+          title: "items",
+          data: formatRes,
+          categoryData : categoryNames 
+        });
+      }
+    })
   });
 };
+
+export let postItem = (req:Request , res: Response) => {
+  console.log(req.body);
+} 
