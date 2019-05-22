@@ -19,7 +19,127 @@ block content
                         tr
                         each value in item
                             td=value
-    script. 
+    div.uk-container.uk-padding-large
+        p="For Add/Delete/Update an item click on item ID"
+        form(method="post").uk-form-horizontal
+            div.uk-margin
+                label.uk-form-label="ID"
+                div.uk-form-controls
+                    input(type="text" name="id" autocomplete="off" id="input-id").uk-input
+            div.uk-margin
+                label.uk-form-label="Name"
+                div.uk-form-controls
+                    input(type="text" name="name" autocomplete="off" id="input-name").uk-input
+            div.uk-margin
+                label.uk-form-label="Price"
+                div.uk-form-controls
+                    input(type="text" name="price" autocomplete="off" id="input-price").uk-input
+            div.uk-margin
+                label.uk-form-label="Discount"
+                div.uk-form-controls
+                    input(type="text" name="discount" autocomplete="off" id="input-discount").uk-input
+            div.uk-margin
+                label.uk-form-label="Release Date"
+                div.uk-form-controls
+                    input(type="text" name="release_date" autocomplete="off" id="input-release_date").uk-input
+            div.uk-margin
+                label.uk-form-label="Activation"
+                div.uk-form-controls
+                    input(type="text" name="activation" autocomplete="off" id="input-activation").uk-input
+            div.uk-margin
+                label.uk-form-label="Publisher"
+                div.uk-form-controls
+                    input(type="text" name="publisher" autocomplete="off" id="input-publisher").uk-input
+            div.uk-margin
+                label.uk-form-label="Language"
+                div.uk-form-controls
+                    input(type="text" name="language" autocomplete="off" id="input-language").uk-input
+            div.uk-margin
+                label(for="form-horizontal-select").uk-form-label="Genre"
+                div.uk-form-controls
+                    select.uk-select#form-horizontal-select
+                        each category in categoryData
+                            option=category
+            div.uk-margin
+                label.uk-form-label="Age Rating"
+                div.uk-form-controls
+                    input(type="text" name="age_rating" autocomplete="off" id="input-age_rating").uk-input
+            div.uk-margin
+                label.uk-form-label="OS"
+                div.uk-form-controls
+                    input(type="text" name="os" autocomplete="off" id="input-os").uk-input
+            div.uk-margin
+                label.uk-form-label="Image URL"
+                div.uk-form-controls
+                    input(type="text" name="image_url" autocomplete="off" id="input-image_url").uk-input
+            div.uk-margin
+                label.uk-form-label="Description"
+                div.uk-form-controls
+                    textarea(class="uk-textarea" name="description" rows="5" placeholder="Description" id="input-description")
+            div.uk-margin
+                label.uk-form-label="Minimal Specification"
+                div.uk-form-controls
+                    textarea(class="uk-textarea" name="minimal_specification" rows="5" placeholder="Minimal Specification" id="input-minimal_specification")
+            div.uk-margin
+                label.uk-form-label="Maximal Specification"
+                div.uk-form-controls
+                    textarea(class="uk-textarea" name="maximal_specification" rows="5" placeholder="Maximal Specification" id="input-maximal_specification")
+            div.uk-margin
+                label
+                    input(type="radio", id="radio-Add" name="radio" value="add-radio").uk-radio
+                | Add
+                label.uk-margin-left  
+                    input(type="radio",id="radio-Update", name="radio" value="update-radio").uk-radio
+                | Update
+                label.uk-margin-left
+                    input(type="radio", id="radio-Delete",name="radio" value="delete-radio").uk-radio
+                | Delete
+            div.uk-margin
+                input(type="submit", value="Submit").uk-input
+
+    script.
+        $("table tbody").find("td").click(function(){
+            var id = $(this).text();
+            if(id.length == 24 && id[0]==5){
+                $.ajax({url: `http://localhost:5000/item/${id}`,success : function(res){
+                    jQ_append("input-id",id);
+                    jQ_append("input-name",res.name);
+                    jQ_append("input-price",res.price);
+                    jQ_append("input-discount",res.discount);
+                    jQ_append("input-release_date",res.release_date);
+                    jQ_append("input-activation",res.activation);
+                    jQ_append("input-publisher",res.publisher);
+                    jQ_append("input-language",res.language);
+                    $.ajax({url:`http://localhost:5000/categories/${res.genre}`,success : function(cres){
+                        $("select").val(cres.name);
+                    }})
+                    jQ_append("input-age_rating",res.age_rating);
+                    jQ_append("input-os",res.OS);
+                    jQ_append("input-image_url",res.image);
+                    jQ_append("input-description",res.description);
+
+                    let s_min_temp = `${res.specification.minimal.os};
+                                    ${res.specification.minimal.processor};
+                                    ${res.specification.minimal.RAM};
+                                    ${res.specification.minimal.GPU};
+                                    ${res.specification.minimal.disk_space};`
+
+                    let s_max_temp = `${res.specification.maximal.os};
+                                    ${res.specification.maximal.processor};
+                                    ${res.specification.maximal.RAM};
+                                    ${res.specification.maximal.GPU};
+                                    ${res.specification.maximal.disk_space};`
+
+                    jQ_append("input-minimal_specification",s_min_temp);
+                    jQ_append("input-maximal_specification",s_max_temp);          
+                }})
+            }
+        })
+        function jQ_append(id_of_input, text){
+            var input_id = id_of_input.split(' ');
+            $(`#${input_id[0]}`).val(text);
+        }
         $("#reload").click(function(){
             window.location.reload();
         })
+        
