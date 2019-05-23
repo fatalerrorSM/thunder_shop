@@ -96,6 +96,7 @@ app.get('/admin/categories',passportConfig.isAuthenticated,adminController.getCa
 app.post('/admin/categories',passportConfig.isAuthenticated,adminController.postCategories);
 
 app.get('/admin/items',passportConfig.isAuthenticated,adminController.getItems);
+app.post('/admin/items',passportConfig.isAuthenticated,adminController.postItem);
 
 app.get('/admin/dashboard',passportConfig.isAuthenticated,adminController.getDashboard);
 
