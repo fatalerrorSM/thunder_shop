@@ -48,11 +48,7 @@ exports.postCategories = (req, res) => {
     req.assert("id");
     const errors = req.validationErrors();
     if (errors) {
-        return res.render("categories", {
-            st: false,
-            title: "categories",
-            error: "Something goes wrong try again"
-        });
+        return res.redirect("categories");
     }
     switch (req.body.radio) {
         case "add-radio": {
@@ -356,4 +352,89 @@ exports.getItems = (req, res) => {
             }
         });
     });
+};
+exports.postItem = (req, res) => {
+    switch (req.body.radio) {
+        case "add-radio": {
+            let options = {
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: req.body.name,
+                    price: req.body.price,
+                    discount: req.body.discount,
+                    release_date: req.body.release_date,
+                    activation: req.body.activation,
+                    publisher: req.body.publisher,
+                    language: req.body.language,
+                    genre: req.body.genre,
+                    age_rating: req.body.age_rating,
+                    os: req.body.os,
+                    image_url: req.body.image_url,
+                    description: req.body.description,
+                    minimal_specification: req.body.minimal_specification,
+                    maximal_specification: req.body.maximal_specification
+                })
+            };
+            got_1.default
+                .post(`${process.env.LOCAL_URL}/item`, options)
+                .then(response => {
+                if (response.statusCode === 201) {
+                    return res.redirect("items");
+                }
+                else {
+                    return res.redirect("items");
+                }
+            })
+                .catch((err) => {
+                console.error(err.message);
+            });
+            break;
+        }
+        case "update-radio": {
+            if (req.body.id) {
+                const options = {
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: req.body.id,
+                        name: req.body.name,
+                        price: req.body.price,
+                        discount: req.body.discount,
+                        release_date: req.body.release_date,
+                        activation: req.body.activation,
+                        publisher: req.body.publisher,
+                        language: req.body.language,
+                        genre: req.body.genre,
+                        age_rating: req.body.age_rating,
+                        os: req.body.os,
+                        image_url: req.body.image_url,
+                        description: req.body.description,
+                        minimal_specification: req.body.minimal_specification,
+                        maximal_specification: req.body.maximal_specification
+                    })
+                };
+                got_1.default
+                    .put(`${process.env.LOCAL_URL}/item/${req.body.id}`, options)
+                    .then(response => {
+                    if (response.statusCode === 200) {
+                        return res.redirect("items");
+                    }
+                    else {
+                        return res.redirect("items");
+                    }
+                })
+                    .catch((err) => {
+                    console.error(err.message);
+                });
+            }
+            else {
+                return res.redirect("items");
+            }
+        }
+        default:
+            break;
+    }
 };
