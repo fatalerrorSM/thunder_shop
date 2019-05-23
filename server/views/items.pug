@@ -57,7 +57,7 @@ block content
             div.uk-margin
                 label(for="form-horizontal-select").uk-form-label="Genre"
                 div.uk-form-controls
-                    select.uk-select#form-horizontal-select
+                    select(name="genre").uk-select#form-horizontal-select
                         each category in categoryData
                             option=category
             div.uk-margin
@@ -80,10 +80,18 @@ block content
                 label.uk-form-label="Minimal Specification"
                 div.uk-form-controls
                     textarea(class="uk-textarea" name="minimal_specification" rows="5" placeholder="Minimal Specification" id="input-minimal_specification")
+                    div.uk-inline
+                    button(type="button").uk-button.uk-button-default="help"
+                    div(uk-drop="pos:right-center")
+                        div.uk-card.uk-card-body.uk-card-default="Enter item specs. using ; (coma-dot)"            
             div.uk-margin
                 label.uk-form-label="Maximal Specification"
                 div.uk-form-controls
                     textarea(class="uk-textarea" name="maximal_specification" rows="5" placeholder="Maximal Specification" id="input-maximal_specification")
+                    div.uk-inline
+                    button(type="button").uk-button.uk-button-default="help"
+                    div(uk-drop="pos:right-center")
+                        div.uk-card.uk-card-body.uk-card-default="Enter item specs. using ; (coma-dot)"
             div.uk-margin
                 label
                     input(type="radio", id="radio-Add" name="radio" value="add-radio").uk-radio
@@ -96,7 +104,6 @@ block content
                 | Delete
             div.uk-margin
                 input(type="submit", value="Submit").uk-input
-
     script.
         $("table tbody").find("td").click(function(){
             var id = $(this).text();
@@ -118,17 +125,17 @@ block content
                     jQ_append("input-image_url",res.image);
                     jQ_append("input-description",res.description);
 
-                    let s_min_temp = `${res.specification.minimal.os};
-                                    ${res.specification.minimal.processor};
-                                    ${res.specification.minimal.RAM};
-                                    ${res.specification.minimal.GPU};
-                                    ${res.specification.minimal.disk_space};`
+                    let s_min_temp = `${res.specification.minimal.os}
+                                    ${res.specification.minimal.processor}
+                                    ${res.specification.minimal.RAM}
+                                    ${res.specification.minimal.GPU}
+                                    ${res.specification.minimal.disk_space}`
 
-                    let s_max_temp = `${res.specification.maximal.os};
-                                    ${res.specification.maximal.processor};
-                                    ${res.specification.maximal.RAM};
-                                    ${res.specification.maximal.GPU};
-                                    ${res.specification.maximal.disk_space};`
+                    let s_max_temp = `${res.specification.maximal.os}
+                                    ${res.specification.maximal.processor}
+                                    ${res.specification.maximal.RAM}
+                                    ${res.specification.maximal.GPU}
+                                    ${res.specification.maximal.disk_space}`
 
                     jQ_append("input-minimal_specification",s_min_temp);
                     jQ_append("input-maximal_specification",s_max_temp);          
