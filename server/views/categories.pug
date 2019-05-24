@@ -7,9 +7,9 @@ block content
     div.uk-section.uk-section-secondary
         div.uk-container
             h3.uk-text-center="Categories"
-
-    div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-padding-large.uk-padding-remove-bottom
-        button.uk-button#reload="Refresh"
+    button.uk-button#reload="Refresh"
+    div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-padding-remove-bottom
+        
         table.uk-table.uk-table-hover.uk-table-divider  
             thead
                 tr
@@ -31,13 +31,13 @@ block content
         form(method="post" uk-grid).uk-grid-small
             div.uk-width-1-1
                 legend="ID"
-                input(type="text" name="id" id="input-id").uk-input
+                input(type="text" autocomplete="off" name="id" id="input-id").uk-input
             div.uk-width-1-2
                 legend="Name"
-                input(type="text" name="name" id="input-name").uk-input
+                input(type="text" autocomplete="off" name="name" id="input-name").uk-input
             div.uk-width-1-2
                 legend="Image"
-                input(type="text" name="image" id="input-image").uk-input
+                input(type="text" autocomplete="off" name="image" id="input-image").uk-input
             div.uk-child-width-auto.uk-margin
                 label
                     input(type="radio", id="radio-Add" name="radio" value="add-radio").uk-radio
