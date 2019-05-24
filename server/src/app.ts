@@ -7,27 +7,33 @@ import expressValidator from "express-validator";
 import path from "path";
 import mongo from "connect-mongo";
 import mongoose from "mongoose";
-import {MONGODB_URI,SESSION_SECRET} from "./utils/secrets";
+import { MONGODB_URI, SESSION_SECRET } from "./utils/secrets";
 //Controllers (route handlers)
 import * as homeController from "./controllers/home";
 import * as categoriesController from "./controllers/category";
 import * as adminController from "./controllers/admin";
 import * as itemController from "./controllers/item";
+import * as orderController from "./controllers/orders";
+
 const MongoStore = mongo(session);
 
 //Create Express server
 const app = express();
 
 // Connect to MongoDB
-const mongoUrl : string | any = MONGODB_URI;
+const mongoUrl: string | any = MONGODB_URI;
 
-const session_secret : string | any = SESSION_SECRET;
+const session_secret: string | any = SESSION_SECRET;
 
 // API keys and Passport configuration
 import * as passportConfig from "./config/passport";
 
 mongoose
-  .connect(mongoUrl, { useNewUrlParser: true,useCreateIndex: true, useFindAndModify: false  })
+  .connect(mongoUrl, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
   .then(() => {
     /** ready to use. The `mongoose.connect()` promise resolves to undefined. */
   })
@@ -45,7 +51,8 @@ app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(expressValidator());
-app.use(session({
+app.use(
+  session({
     resave: true,
     saveUninitialized: true,
     secret: session_secret,
@@ -53,51 +60,80 @@ app.use(session({
       url: mongoUrl,
       autoReconnect: true
     })
-}));
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // Access to css,images,and other files
-app.use('/admin/static',express.static(__dirname + '/public'));
+app.use("/admin/static", express.static(__dirname + "/public"));
 
 /*
  * Primary app routes
-*/
+ */
 
 // Default Zone (entry point)
 app.get("/", homeController.index);
-app.post('/', homeController.postSignIn);
+app.post("/", homeController.postSignIn);
 
 // Categories Zone
 app.get("/categories", categoriesController.getAllcategories);
-app.get('/categories/:id',categoriesController.getCategory);
+app.get("/categories/:id", categoriesController.getCategory);
 app.post("/categories", categoriesController.addCategory);
-app.put("/categories/:id",categoriesController.updateCategory);
+app.put("/categories/:id", categoriesController.updateCategory);
 app.delete("/categories/:id", categoriesController.deleteCategory);
 
 // Items Zone
-app.get("/items",itemController.getAllItems);
-app.get("/item/:id",itemController.getItem);
-app.post("/item",itemController.addItem);
-app.delete("/item/:id",itemController.deleteItem);
-app.put("/item/:id",itemController.updateItem);
+app.get("/items", itemController.getAllItems);
+app.get("/item/:id", itemController.getItem);
+app.post("/item", itemController.addItem);
+app.delete("/item/:id", itemController.deleteItem);
+app.put("/item/:id", itemController.updateItem);
 
-// Admin Zone 
+// Orders Zone
+app.get("/orders", orderController.getAllOrders);
+app.get("/orders/:id", orderController.getOrder);
+app.post("/orders", orderController.addOrder);
+app.put("/orders/:id", orderController.updateOrder);
 
-app.get("/admin",passportConfig.isAuthenticated,adminController.getAdmin);
-app.post("/admin",adminController.postAdmin);
-app.get('/logout',adminController.logout);
+// Admin Zone
 
-app.get('/admin/manage',passportConfig.isAuthenticated,adminController.getManage);
-app.post("/admin/manage",passportConfig.isAuthenticated,adminController.postAdmin);
+app.get("/admin", passportConfig.isAuthenticated, adminController.getAdmin);
+app.post("/admin", adminController.postAdmin);
+app.get("/logout", adminController.logout);
 
-app.get('/admin/categories',passportConfig.isAuthenticated,adminController.getCategories);
-app.post('/admin/categories',passportConfig.isAuthenticated,adminController.postCategories);
+app.get(
+  "/admin/orders",
+  passportConfig.isAuthenticated,
+  adminController.getOrders
+);
 
-app.get('/admin/items',passportConfig.isAuthenticated,adminController.getItems);
-app.post('/admin/items',passportConfig.isAuthenticated,adminController.postItem);
+app.get(
+  "/admin/categories",
+  passportConfig.isAuthenticated,
+  adminController.getCategories
+);
+app.post(
+  "/admin/categories",
+  passportConfig.isAuthenticated,
+  adminController.postCategories
+);
 
-app.get('/admin/dashboard',passportConfig.isAuthenticated,adminController.getDashboard);
+app.get(
+  "/admin/items",
+  passportConfig.isAuthenticated,
+  adminController.getItems
+);
+app.post(
+  "/admin/items",
+  passportConfig.isAuthenticated,
+  adminController.postItem
+);
+
+app.get(
+  "/admin/dashboard",
+  passportConfig.isAuthenticated,
+  adminController.getDashboard
+);
 
 export default app;
