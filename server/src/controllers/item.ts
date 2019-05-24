@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction, response } from "express";
 import { default as Item } from "../models/Item";
 import { Category } from "../models/Category";
-import { render } from "pug";
 
 export let getAllItems = (req: Request, res: Response) => {
   Item.find()
@@ -62,6 +61,7 @@ export let addItem = (req: Request, res: Response, next: NextFunction) => {
     Item.findOne({ name: req.body.name })
       .then((existngItem: any) => {
         if (existngItem) {
+          console.log("HERE");
           return res.status(500).send("Item is already exist");
         }else{
           return next();
@@ -69,7 +69,8 @@ export let addItem = (req: Request, res: Response, next: NextFunction) => {
       })
       .catch((err: Error) => {
         console.error(err);
-        return res.status(500);
+        console.log("HERE2");
+        res.status(500);
       });
 
     let min_spec = req.body.minimal_specification.split("\r\n");

@@ -62,6 +62,7 @@ exports.addItem = (req, res, next) => {
         Item_1.default.findOne({ name: req.body.name })
             .then((existngItem) => {
             if (existngItem) {
+                console.log("HERE");
                 return res.status(500).send("Item is already exist");
             }
             else {
@@ -70,7 +71,8 @@ exports.addItem = (req, res, next) => {
         })
             .catch((err) => {
             console.error(err);
-            return res.status(500);
+            console.log("HERE2");
+            res.status(500);
         });
         let min_spec = req.body.minimal_specification.split("\r\n");
         let max_spec = req.body.maximal_specification.split("\r\n");
