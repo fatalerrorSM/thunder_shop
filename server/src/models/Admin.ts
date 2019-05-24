@@ -15,15 +15,26 @@ export type AdminModel = mongoose.Document & {
     adress: string;
     city_code: number;
   };
-  verifyPassword : verifyPassword
+  verifyPassword: verifyPassword;
 };
 
-type verifyPassword = (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void;
+type verifyPassword = (
+  candidatePassword: string,
+  cb: (err: any, isMatch: any) => {}
+) => void;
 
-const verifyPassword : verifyPassword = function (this : AdminModel,candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, (err: mongoose.Error, isMatch: boolean) => {
-    cb(err, isMatch);
-  });
+const verifyPassword: verifyPassword = function(
+  this: AdminModel,
+  candidatePassword,
+  cb
+) {
+  bcrypt.compare(
+    candidatePassword,
+    this.password,
+    (err: mongoose.Error, isMatch: boolean) => {
+      cb(err, isMatch);
+    }
+  );
 };
 
 const adminSchema: Schema = new Schema(

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction, response } from "express";
 import { default as Admin } from "../models/Admin";
 import { Category } from "../models/Category";
 import { default as Item } from "../models/Item";
+import {default as Order} from "../models/Order";
 import { render } from "pug";
 import got from "got";
 
@@ -72,15 +73,12 @@ export let postCategories = (req: Request, res: Response) => {
           if (response.statusCode === 201) {
             return res.redirect("categories");
           } else {
-            return res.render("categories", {
-              st: false,
-              title: "categories",
-              error: response.statusMessage
-            });
+            return res.redirect("categories");
           }
         })
         .catch((err: Error) => {
-          console.error(err.message);
+          console.error("79", err.message);
+          res.redirect("categories");
         });
       break;
     }
@@ -102,15 +100,12 @@ export let postCategories = (req: Request, res: Response) => {
             if (response.statusCode === 200) {
               return res.redirect("categories");
             } else {
-              return render("categories", {
-                st: false,
-                title: "categories",
-                error: response.statusMessage
-              });
+              return res.redirect("categories");
             }
           })
           .catch((err: Error) => {
             console.error(err.message);
+            res.redirect("categories");
           });
       } else {
         res.render("categories", {
@@ -129,15 +124,12 @@ export let postCategories = (req: Request, res: Response) => {
             if (response.statusCode === 200) {
               return res.redirect("categories");
             } else {
-              res.render("categories", {
-                st: false,
-                title: "categories",
-                error: "Something goes wrong try again"
-              });
+              return res.redirect("categories");
             }
           })
           .catch((err: Error) => {
             console.error(err.message);
+            res.redirect("categories");
           });
       }
       break;
@@ -148,11 +140,6 @@ export let postCategories = (req: Request, res: Response) => {
   }
 };
 
-export let getManage = (req: Request, res: Response) => {
-  res.render("manage", {
-    title: "manage"
-  });
-};
 
 export let getDashboard = (req: Request, res: Response) => {
   res.render("dashboard", {
@@ -407,14 +394,17 @@ export let postItem = (req: Request, res: Response) => {
       got
         .post(`${process.env.LOCAL_URL}/item`, options)
         .then(response => {
+          console.log("Got answer : ", response.statusCode);
           if (response.statusCode === 201) {
             return res.redirect("items");
           } else {
-            return res.redirect("items");
+            console.log("admin HERE");
+            res.redirect("items");
           }
         })
         .catch((err: Error) => {
           console.error(err.message);
+          res.redirect("items");
         });
       break;
     }
@@ -453,12 +443,64 @@ export let postItem = (req: Request, res: Response) => {
           })
           .catch((err: Error) => {
             console.error(err.message);
+            res.redirect("items");
           });
       } else {
         return res.redirect("items");
       }
     }
+    case "delete-radio": {
+      if (req.body.id) {
+        got
+          .delete(`${process.env.LOCAL_URL}/item/${req.body.id}`)
+          .then(response => {
+            if (response.statusCode === 200) {
+              return res.redirect("items");
+            } else {
+              return res.redirect("items");
+            }
+          })
+          .catch((err: Error) => {
+            console.error(err.message);
+            res.redirect("items");
+          });
+      }
+      break;
+    }
     default:
       break;
   }
 };
+
+export let getOrders = (req: Request , res : Response) => {
+  const cursor = Order.find({});
+  cursor.then(orders => {
+    if (!orders) {
+      res.render("orders", {
+        st: false,
+        title: "items",
+        err:
+          "Items and Categories can't be downloaded,please,ask your system administrator or try agait later"
+      });
+    } else {
+      let formatRes: any = [];
+      orders.forEach(order => {
+        let obj = {
+          id: order._id,
+          customer : order.customer_first_name + " " + order.customer_last_name,
+          customer_phone : order.customer_phone_number,
+          order_: order.customer_order,
+          order_price : order.price,
+          status: order.order_status,
+        };
+        formatRes.push(obj);
+      });
+
+      res.render("orders", {
+        st: true,
+        title: "orders",
+        data: formatRes,
+      });
+    }
+  })
+}

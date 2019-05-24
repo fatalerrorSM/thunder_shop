@@ -45,14 +45,11 @@ export let addCategory = (req: Request, res: Response, next: NextFunction) => {
       }
       res.status(201).json(category);
     });
-  }).catch((err : Error) => {
-    console.error(err);
   });
 };
 
 export let getCategory = (req: Request, res: Response) => {
-  if(req.params.id){
-    let category = Category.findById(req.params.id)
+  let category = Category.findById(req.params.id)
     .then((foundCategory: any) => {
       if (!foundCategory) {
         return res.status(404).send("Category is not found");
@@ -63,81 +60,70 @@ export let getCategory = (req: Request, res: Response) => {
     .catch((err: Error) => {
       console.error(err.message);
     });
-  }else{
-    return res.status(400).send("Bad Request");
-  }
 };
 
 export let deleteCategory = (req: Request, res: Response) => {
-  if(req.params.id){
-    let category = Category.findByIdAndDelete(req.params.id).then((result : any) => {
-      if(!result) {return res.status(500).send(`Can't delete document with id -> ${req.params.id}`)}
-      else{
-        return res.status(200).send(`Document with id -> ${req.params.id} successfully deleted`);
-      }
-    }).catch((err : Error) => {
-      console.error(err.message);
-    })
-  }else{
-    return res.status(400).send("Bad Request");
-  }
+  let category = Category.findByIdAndDelete({_id : req.params.id}).then((result : any) => {
+    if(!result) {return res.status(500).send(`Can't delete document with id -> ${req.params.id}`)}
+    else{
+      return res.status(200).send(`Document with id -> ${req.params.id} successfully deleted`);
+    }
+  }).catch((err : Error) => {
+    console.error(err.message);
+  })
 };
 
 export let updateCategory = (req: Request, res: Response) => {
-  if(req.params.id){
-    if (!req.body.name && !req.body.image) {
-      return res.status(202).send("Object with options for update is empty");
-    } else if (req.body.name && !req.body.image) {
-      let category: any = Category.findOneAndUpdate(req.params.id, {
-        name: req.body.name
-      }).then((result: any) => {
-        if (!result) {
-          return res
-            .status(500)
-            .send(
-              `Cannot update category with id ${
-                req.params.id
-              } , and body parametrs ${req.body.name}`
-            );
-        } else {
-          return res.status(200).json(category);
-        }
-      });
-    } else if (!req.body.name && req.body.image) {
-      let category: any = Category.findOneAndUpdate(req.params.id, {
-        image: req.body.image
-      }).then((result: any) => {
-        if (!result) {
-          return res
-            .status(500)
-            .send(
-              `Cannot update category with id ${
-                req.params.id
-              } , and body parametrs ${req.body.image}`
-            );
-        } else {
-          return res.status(200).json(category);
-        }
-      });
-    } else if (req.body.name && req.body.image) {
-      let category: any = Category.findOneAndUpdate(req.params.id, {
-        name: req.body.name,
-        image: req.body.image
-      }).then((result: any) => {
-        if (!result) {
-          return res
-            .status(500)
-            .send(
-              `Cannot update category with id ${
-                req.params.id
-              } , and body parametrs ${req.body.name} ${req.body.image}`
-            );
-        } else {
-          return res.status(200).json(category);
-        }
-      });
-    }
-  }else{
-    return res.status(400).send("Bad Request");
+  if (!req.body.name && !req.body.image) {
+    return res.status(202).send("Object with options for update is empty");
+  } else if (req.body.name && !req.body.image) {
+    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
+      name: req.body.name
+    }).then((result: any) => {
+      if (!result) {
+        return res
+          .status(500)
+          .send(
+            `Cannot update category with id ${
+              req.params.id
+            } , and body parametrs ${req.body.name}`
+          );
+      } else {
+        return res.status(200).json(category);
+      }
+    });
+  } else if (!req.body.name && req.body.image) {
+    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
+      image: req.body.image
+    }).then((result: any) => {
+      if (!result) {
+        return res
+          .status(500)
+          .send(
+            `Cannot update category with id ${
+              req.params.id
+            } , and body parametrs ${req.body.image}`
+          );
+      } else {
+        return res.status(200).json(category);
+      }
+    });
+  } else if (req.body.name && req.body.image) {
+    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
+      name: req.body.name,
+      image: req.body.image
+    }).then((result: any) => {
+      if (!result) {
+        return res
+          .status(500)
+          .send(
+            `Cannot update category with id ${
+              req.params.id
+            } , and body parametrs ${req.body.name} ${req.body.image}`
+          );
+      } else {
+        return res.status(200).json(category);
+      }
+    });
   }
 };
