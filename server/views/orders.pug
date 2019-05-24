@@ -1,0 +1,52 @@
+extends layout/layout
+
+block content
+    include common/header
+    div(style="overflow : scroll;height:200px;overflow-x: hidden;" ).uk-container.uk-margin
+        table.uk-table.uk-table-hover.uk-table-divider  
+            thead
+                tr
+                    th="ID"
+                    th="Customer"
+                    th="Customer phone"
+                    th="Customer order"
+                    th="Order price"
+                    th="Order status"
+
+            tbody
+            case st 
+                when false
+                    p=err
+                when true
+                    each item in data
+                        tr
+                        each value in item
+                            td=value
+    
+    div.uk-container.uk-padding-large
+        p="For update an order status click on order ID"
+        form(method="post").uk-form-horizontal
+            div.uk-margin
+                label.uk-form-label="ID"
+                div.uk-form-controls
+                    input(type="text" name="id" autocomplete="off" id="input-id").uk-input
+            div.uk-margin
+                label.uk-form-label="Order status"
+                div.uk-form-controls
+                    input(type="text" name="update_status" autocomplete="off" id="input-update_status").uk-input
+            div.uk-margin
+                input(type="submit", value="Submit").uk-input
+    script.
+        $("table tbody").find("td").click(function(){
+            var id = $(this).text();
+            if(id.length == 24 && id[0]==5){
+                $.ajax({url: `http://localhost:5000/orders/${id}`,success : function(res){
+                    jQ_append("input-id",id);
+                    jQ_append("input-update_status",res.order_status)
+                }})
+            }
+        })
+        function jQ_append(id_of_input, text){
+            var input_id = '#'+id_of_input;
+            $(input_id).val(text);
+        }
