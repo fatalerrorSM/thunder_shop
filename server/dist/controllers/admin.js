@@ -366,12 +366,10 @@ exports.postItem = (req, res) => {
             got_1.default
                 .post(`${process.env.LOCAL_URL}/item`, options)
                 .then(response => {
-                console.log("Got answer : ", response.statusCode);
                 if (response.statusCode === 201) {
                     return res.redirect("items");
                 }
                 else {
-                    console.log("admin HERE");
                     res.redirect("items");
                 }
             })
@@ -460,21 +458,108 @@ exports.getOrders = (req, res) => {
         else {
             let formatRes = [];
             orders.forEach(order => {
-                let obj = {
-                    id: order._id,
-                    customer: order.customer_first_name + " " + order.customer_last_name,
-                    customer_phone: order.customer_phone_number,
-                    order_: order.customer_order,
-                    order_price: order.price,
-                    status: order.order_status,
-                };
-                formatRes.push(obj);
+                if (order.order_status === "Your order is delivered!") {
+                }
+                else {
+                    let obj = {
+                        id: order._id,
+                        customer: order.customer_first_name + " " + order.customer_last_name,
+                        customer_phone: order.customer_phone_number,
+                        order_: order.customer_order,
+                        order_price: order.price,
+                        status: order.order_status
+                    };
+                    formatRes.push(obj);
+                }
             });
             res.render("orders", {
                 st: true,
                 title: "orders",
-                data: formatRes,
+                data: formatRes
             });
         }
     });
+};
+exports.postOrders = (req, res) => {
+    console.log(req.body);
+    res.redirect("orders");
+    if (req.body.id && req.body.radio) {
+        switch (req.body.radio) {
+            case "processed-radio": {
+                const options = {
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        update_status: "Your order is being processed!"
+                    })
+                };
+                got_1.default
+                    .put(`${process.env.LOCAL_URL}/orders/${req.body.id}`, options)
+                    .then(response => {
+                    if (response.statusCode === 200) {
+                        res.redirect("orders");
+                    }
+                    else {
+                        res.redirect("orders");
+                    }
+                })
+                    .catch((err) => {
+                    console.error(err.message);
+                    res.redirect("orders");
+                });
+                break;
+            }
+            case "shipped-radio": {
+                const options = {
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        update_status: "Your order is being shipped!"
+                    })
+                };
+                got_1.default
+                    .put(`${process.env.LOCAL_URL}/orders/${req.body.id}`, options)
+                    .then(response => {
+                    if (response.statusCode === 200) {
+                        return res.redirect("orders");
+                    }
+                    else {
+                        return res.redirect("orders");
+                    }
+                })
+                    .catch((err) => {
+                    console.error(err.message);
+                    res.redirect("orders");
+                });
+                break;
+            }
+            case "delivered-radio": {
+                const options = {
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        update_status: "Your order is delivered!"
+                    })
+                };
+                got_1.default
+                    .put(`${process.env.LOCAL_URL}/orders/${req.body.id}`, options)
+                    .then(response => {
+                    if (response.statusCode === 200) {
+                        return res.redirect("orders");
+                    }
+                    else {
+                        return res.redirect("orders");
+                    }
+                })
+                    .catch((err) => {
+                    console.error(err.message);
+                    res.redirect("orders");
+                });
+                break;
+            }
+        }
+    }
 };
