@@ -34,6 +34,16 @@ block content
                 label.uk-form-label="Order status"
                 div.uk-form-controls
                     input(type="text" name="update_status" autocomplete="off" id="input-update_status").uk-input
+            div.uk-child-width-auto.uk-margin
+                label
+                    input(type="radio", id="radio-processed" name="radio" value="processed-radio").uk-radio
+                | Processed
+                label.uk-margin-left  
+                    input(type="radio",id="radio-shipped", name="radio" value="shipped-radio").uk-radio
+                | Shipped
+                label.uk-margin-left
+                    input(type="radio", id="radio-delivered",name="radio" value="delivered-radio").uk-radio
+                | Delivered
             div.uk-margin
                 input(type="submit", value="Submit").uk-input
     script.
