@@ -94,6 +94,7 @@ app.get("/admin", passportConfig.isAuthenticated, adminController.getAdmin);
 app.post("/admin", adminController.postAdmin);
 app.get("/logout", adminController.logout);
 app.get("/admin/orders", passportConfig.isAuthenticated, adminController.getOrders);
+app.post("/admin/orders", passportConfig.isAuthenticated, adminController.postOrders);
 app.get("/admin/categories", passportConfig.isAuthenticated, adminController.getCategories);
 app.post("/admin/categories", passportConfig.isAuthenticated, adminController.postCategories);
 app.get("/admin/items", passportConfig.isAuthenticated, adminController.getItems);

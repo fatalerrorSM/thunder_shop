@@ -107,6 +107,12 @@ app.get(
   passportConfig.isAuthenticated,
   adminController.getOrders
 );
+app.post(
+  "/admin/orders",
+  passportConfig.isAuthenticated,
+  adminController.postOrders
+);
+
 
 app.get(
   "/admin/categories",
