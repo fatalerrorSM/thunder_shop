@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Category, CategoryModel } from "../models/Category";
+import nodemailer from "nodemailer";
 
 import Order from "../models/Order";
 import Item, { ItemModel } from "../models/Item";
@@ -51,6 +52,14 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
     return res.status(400).send("Bad Request");
   }
 
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
   const order = new Order({
     customer_first_name: req.body.customer_first_name,
     customer_last_name: req.body.customer_last_name,
@@ -58,13 +67,27 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
     customer_phone_number: req.body.customer_phone_number,
     customer_order: req.body.customer_order,
     order_status: "Administration of the site, will contact you shortly.",
-    price : req.body.order_price
+    price: req.body.order_price
   });
+
+  var mailOptions = {
+    from: process.env.EMAIL,
+    to: req.body.customer_email_adress,
+    subject: 'Thunder Shop',
+    text: `Hello ${order.customer_first_name} ${order.customer_last_name},thank you for your order -> ${order.customer_order}.To pay - ${order.price}. ${order.order_status}`
+  };
 
   order.save(err => {
     if (err) {
       return next(err);
     }
+    transporter.sendMail(mailOptions,(error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
     res.status(201).json(order);
   });
 };
@@ -78,7 +101,15 @@ export let updateOrder = (req: Request, res: Response) => {
     return res.status(400).send("Bad Request");
   }
 
-  let order: any = Order.findById(
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  let order: any = Order.findByIdAndUpdate(
     { _id: req.params.id },
     {
       order_status: req.body.update_status
@@ -86,7 +117,7 @@ export let updateOrder = (req: Request, res: Response) => {
   )
     .then((result: any) => {
       if (!result) {
-        res
+        return res
           .status(500)
           .send(
             `Cannot update order with id ${
@@ -94,11 +125,23 @@ export let updateOrder = (req: Request, res: Response) => {
             } , and body parametrs ${req.body.update_status}`
           );
       } else {
-        res.status(200).json(order);
+        var mailOptions = {
+          from: process.env.EMAIL,
+          to: result.customer_email_adress,
+          subject: 'Thunder Shop',
+          text: `Hello ${result.customer_first_name} ${result.customer_last_name}.${result.order_status}`
+        };
+        transporter.sendMail(mailOptions,(error, info) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+        return res.status(200).json(order);
       }
     })
     .catch((err: Error) => {
       console.error(err.message);
-      res.redirect("orders");
     });
 };
