@@ -25,6 +25,7 @@ const categoriesController = __importStar(require("./controllers/category"));
 const adminController = __importStar(require("./controllers/admin"));
 const itemController = __importStar(require("./controllers/item"));
 const orderController = __importStar(require("./controllers/orders"));
+const statisticController = __importStar(require("./controllers/statistic"));
 const MongoStore = connect_mongo_1.default(express_session_1.default);
 //Create Express server
 const app = express_1.default();
@@ -84,6 +85,8 @@ app.get("/item/:id", itemController.getItem);
 app.post("/item", itemController.addItem);
 app.delete("/item/:id", itemController.deleteItem);
 app.put("/item/:id", itemController.updateItem);
+// Statistic Zone
+app.get("/stats", statisticController.getStat);
 // Orders Zone
 app.get("/orders", orderController.getAllOrders);
 app.get("/orders/:id", orderController.getOrder);

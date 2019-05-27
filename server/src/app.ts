@@ -14,6 +14,7 @@ import * as categoriesController from "./controllers/category";
 import * as adminController from "./controllers/admin";
 import * as itemController from "./controllers/item";
 import * as orderController from "./controllers/orders";
+import * as statisticController from "./controllers/statistic";
 
 const MongoStore = mongo(session);
 
@@ -89,6 +90,10 @@ app.get("/item/:id", itemController.getItem);
 app.post("/item", itemController.addItem);
 app.delete("/item/:id", itemController.deleteItem);
 app.put("/item/:id", itemController.updateItem);
+
+// Statistic Zone
+
+app.get("/stats",statisticController.getStat);
 
 // Orders Zone
 app.get("/orders", orderController.getAllOrders);
