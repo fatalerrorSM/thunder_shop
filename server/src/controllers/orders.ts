@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 
 import Order from "../models/Order";
 import Item, { ItemModel } from "../models/Item";
+import Statistic from "../models/Statistic";
 
 const request = require("express-validator");
 
@@ -53,12 +54,47 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
   }
 
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASS
     }
   });
+
+  const date = getDate();
+
+  Statistic.findOne({ MONTHS: date.Month })
+    .then((result: any) => {
+      let tempReqPrice = req.body.order_price.split("$");
+      if (!result) {
+        const stats = new Statistic({
+          DAY: date.Day,
+          MONTHS: date.Month,
+          YEAR: date.Year,
+          price: tempReqPrice[0]
+        });
+
+        stats.save(err => {
+          if (err) {
+            return next(err);
+          }
+        });
+      } else {
+        let tempPrice = result.price;
+        let tempReqPrice = req.body.order_price.split("$");
+        let resPrice = 0;
+        resPrice = parseInt(tempPrice) + parseInt(tempReqPrice[0]);
+        Statistic.findOneAndUpdate({MONTHS : date.Month}, {
+          DAY : date.Day,
+          price : resPrice
+        }).catch((err : Error) => {
+          console.error(err.message);
+        })
+      }
+    })
+    .catch((err: Error) => {
+      console.error(err.message);
+    });
 
   const order = new Order({
     customer_first_name: req.body.customer_first_name,
@@ -73,19 +109,23 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
   var mailOptions = {
     from: process.env.EMAIL,
     to: req.body.customer_email_adress,
-    subject: 'Thunder Shop',
-    text: `Hello ${order.customer_first_name} ${order.customer_last_name},thank you for your order -> ${order.customer_order}.To pay - ${order.price}. ${order.order_status}`
+    subject: "Thunder Shop",
+    text: `Hello ${order.customer_first_name} ${
+      order.customer_last_name
+    },thank you for your order -> ${order.customer_order}.To pay - ${
+      order.price
+    }. ${order.order_status}`
   };
 
   order.save(err => {
     if (err) {
       return next(err);
     }
-    transporter.sendMail(mailOptions,(error, info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log("Email sent: " + info.response);
       }
     });
     res.status(201).json(order);
@@ -102,7 +142,7 @@ export let updateOrder = (req: Request, res: Response) => {
   }
 
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.EMAIL,
       pass: process.env.EMAIL_PASS
@@ -128,14 +168,16 @@ export let updateOrder = (req: Request, res: Response) => {
         var mailOptions = {
           from: process.env.EMAIL,
           to: result.customer_email_adress,
-          subject: 'Thunder Shop',
-          text: `Hello ${result.customer_first_name} ${result.customer_last_name}.${result.order_status}`
+          subject: "Thunder Shop",
+          text: `Hello ${result.customer_first_name} ${
+            result.customer_last_name
+          }.${result.order_status}`
         };
-        transporter.sendMail(mailOptions,(error, info) => {
+        transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             console.log(error);
           } else {
-            console.log('Email sent: ' + info.response);
+            console.log("Email sent: " + info.response);
           }
         });
         return res.status(200).json(order);
@@ -145,3 +187,15 @@ export let updateOrder = (req: Request, res: Response) => {
       console.error(err.message);
     });
 };
+
+function getDate() {
+  let date = new Date();
+
+  const resultDate = {
+    Day: date.getDate(),
+    Month: date.getMonth() + 1,
+    Year: date.getFullYear()
+  };
+
+  return resultDate;
+}

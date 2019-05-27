@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const Order_1 = __importDefault(require("../models/Order"));
+const Statistic_1 = __importDefault(require("../models/Statistic"));
 const request = require("express-validator");
 exports.getAllOrders = (req, res) => {
     Order_1.default.find()
@@ -49,11 +50,44 @@ exports.addOrder = (req, res, next) => {
         return res.status(400).send("Bad Request");
     }
     var transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
             user: process.env.EMAIL,
             pass: process.env.EMAIL_PASS
         }
+    });
+    const date = getDate();
+    Statistic_1.default.findOne({ MONTHS: date.Month })
+        .then((result) => {
+        let tempReqPrice = req.body.order_price.split("$");
+        if (!result) {
+            const stats = new Statistic_1.default({
+                DAY: date.Day,
+                MONTHS: date.Month,
+                YEAR: date.Year,
+                price: tempReqPrice[0]
+            });
+            stats.save(err => {
+                if (err) {
+                    return next(err);
+                }
+            });
+        }
+        else {
+            let tempPrice = result.price;
+            let tempReqPrice = req.body.order_price.split("$");
+            let resPrice = 0;
+            resPrice = parseInt(tempPrice) + parseInt(tempReqPrice[0]);
+            Statistic_1.default.findOneAndUpdate({ MONTHS: date.Month }, {
+                DAY: date.Day,
+                price: resPrice
+            }).catch((err) => {
+                console.error(err.message);
+            });
+        }
+    })
+        .catch((err) => {
+        console.error(err.message);
     });
     const order = new Order_1.default({
         customer_first_name: req.body.customer_first_name,
@@ -67,7 +101,7 @@ exports.addOrder = (req, res, next) => {
     var mailOptions = {
         from: process.env.EMAIL,
         to: req.body.customer_email_adress,
-        subject: 'Thunder Shop',
+        subject: "Thunder Shop",
         text: `Hello ${order.customer_first_name} ${order.customer_last_name},thank you for your order -> ${order.customer_order}.To pay - ${order.price}. ${order.order_status}`
     };
     order.save(err => {
@@ -79,7 +113,7 @@ exports.addOrder = (req, res, next) => {
                 console.log(error);
             }
             else {
-                console.log('Email sent: ' + info.response);
+                console.log("Email sent: " + info.response);
             }
         });
         res.status(201).json(order);
@@ -92,7 +126,7 @@ exports.updateOrder = (req, res) => {
         return res.status(400).send("Bad Request");
     }
     var transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
             user: process.env.EMAIL,
             pass: process.env.EMAIL_PASS
@@ -111,7 +145,7 @@ exports.updateOrder = (req, res) => {
             var mailOptions = {
                 from: process.env.EMAIL,
                 to: result.customer_email_adress,
-                subject: 'Thunder Shop',
+                subject: "Thunder Shop",
                 text: `Hello ${result.customer_first_name} ${result.customer_last_name}.${result.order_status}`
             };
             transporter.sendMail(mailOptions, (error, info) => {
@@ -119,7 +153,7 @@ exports.updateOrder = (req, res) => {
                     console.log(error);
                 }
                 else {
-                    console.log('Email sent: ' + info.response);
+                    console.log("Email sent: " + info.response);
                 }
             });
             return res.status(200).json(order);
@@ -129,3 +163,12 @@ exports.updateOrder = (req, res) => {
         console.error(err.message);
     });
 };
+function getDate() {
+    let date = new Date();
+    const resultDate = {
+        Day: date.getDate(),
+        Month: date.getMonth() + 1,
+        Year: date.getFullYear()
+    };
+    return resultDate;
+}
