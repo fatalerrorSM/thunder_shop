@@ -5,9 +5,69 @@ block content
     div(id="chartContainer" style="height: 400px; width: 100%;")
     
     script.
-        window.onload = function () {
-	
-        var chart = new CanvasJS.Chart("chartContainer", {
+        $.ajax({url:`http://localhost:5000/stats`,success : function(res){
+           formatRes = [];
+           res.forEach(element => {
+               var obj = {};
+
+                switch(element.MONTHS){
+                    case "1" : {
+                        obj.MONTH = "January";
+                        break;
+                    }
+                    case "2" : {
+                        obj.MONTH = "February";
+                        break;
+                    }
+                    case "3" : {
+                        obj.MONTH = "March";
+                        break;
+                    }
+                    case "4" : {
+                        obj.MONTH = "April";
+                        break;
+                    }
+                    case "5" : {
+                        obj.MONTH = "May";
+                        break;
+                    }
+                    case "6" : {
+                        obj.MONTH = "June";
+                        break;
+                    }
+                    case "7" : {
+                        obj.MONTH = "July";
+                        break;
+                    }
+                    case "8" : {
+                        obj.MONTH = "August";
+                        break;
+                    }
+                    case "9" : {
+                        obj.MONTH = "September";
+                        break;
+                    }
+                    case "10" : {
+                        obj.MONTH = "October";
+                        break;
+                    }
+                    case "11" : {
+                        obj.MONTH = "November";
+                        break;
+                    }case "12" : {
+                        obj.MONTH = "December";
+                        break;
+                    }
+                }
+
+                obj.price = parseInt(element.price);
+                obj.st = true;
+                formatRes.push(obj);
+           })
+           
+           window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             
             title:{
@@ -27,21 +87,13 @@ block content
                 axisYType: "secondary",
                 color: "#014D65",
                 dataPoints: [
-                    { y: 3, label: "Sweden" },
-                    { y: 7, label: "Taiwan" },
-                    { y: 5, label: "Russia" },
-                    { y: 9, label: "Spain" },
-                    { y: 7, label: "Brazil" },
-                    { y: 7, label: "India" },
-                    { y: 9, label: "Italy" },
-                    { y: 8, label: "Australia" },
-                    { y: 11, label: "Canada" },
-                    { y: 15, label: "South Korea" },
-                    { y: 12, label: "Netherlands" },
-                    { y: 15, label: "Switzerland" },
+                    formatRes[0].st ? { y: formatRes[0].price,   label: formatRes[0].MONTH } : null, 
                 ]
             }]
         });
         chart.render();
 
         }
+        }})
+
+        
