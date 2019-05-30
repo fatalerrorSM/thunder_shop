@@ -12,55 +12,55 @@ block content
 
                 switch(element.MONTHS){
                     case "1" : {
-                        obj.MONTH = "January";
+                        obj.label = "January";
                         break;
                     }
                     case "2" : {
-                        obj.MONTH = "February";
+                        obj.label = "February";
                         break;
                     }
                     case "3" : {
-                        obj.MONTH = "March";
+                        obj.label = "March";
                         break;
                     }
                     case "4" : {
-                        obj.MONTH = "April";
+                        obj.label = "April";
                         break;
                     }
                     case "5" : {
-                        obj.MONTH = "May";
+                        obj.label = "May";
                         break;
                     }
                     case "6" : {
-                        obj.MONTH = "June";
+                        obj.label = "June";
                         break;
                     }
                     case "7" : {
-                        obj.MONTH = "July";
+                        obj.label = "July";
                         break;
                     }
                     case "8" : {
-                        obj.MONTH = "August";
+                        obj.label = "August";
                         break;
                     }
                     case "9" : {
-                        obj.MONTH = "September";
+                        obj.label = "September";
                         break;
                     }
                     case "10" : {
-                        obj.MONTH = "October";
+                        obj.label = "October";
                         break;
                     }
                     case "11" : {
-                        obj.MONTH = "November";
+                        obj.label = "November";
                         break;
                     }case "12" : {
-                        obj.MONTH = "December";
+                        obj.label = "December";
                         break;
                     }
                 }
 
-                obj.price = parseInt(element.price);
+                obj.y = parseInt(element.price);
                 obj.st = true;
                 formatRes.push(obj);
            })
@@ -86,9 +86,7 @@ block content
                 name: "Months",
                 axisYType: "secondary",
                 color: "#014D65",
-                dataPoints: [
-                    formatRes[0].st ? { y: formatRes[0].price,   label: formatRes[0].MONTH } : null, 
-                ]
+                dataPoints: formatRes
             }]
         });
         chart.render();
