@@ -4,12 +4,14 @@ import { Category, CategoryModel } from "../models/Category";
 const request = require("express-validator");
 
 export let getAllcategories = (req: Request, res: Response) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   Category.find()
     .then((categories: any) => {
       if (!categories) {
-        return res.status(404).send("Categories is not found");
+        res.status(404).send("Categories is not found");
       } else {
-        return res.status(200).json(categories);
+        res.status(200).json(categories);
       }
     })
     .catch((err: Error) => {
@@ -49,6 +51,8 @@ export let addCategory = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let getCategory = (req: Request, res: Response) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let category = Category.findById(req.params.id)
     .then((foundCategory: any) => {
       if (!foundCategory) {
