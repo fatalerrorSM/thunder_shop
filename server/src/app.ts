@@ -87,6 +87,7 @@ app.delete("/categories/:id", categoriesController.deleteCategory);
 // Items Zone
 app.get("/items", itemController.getAllItems);
 app.get("/item/:id", itemController.getItem);
+app.get("/item-by-genre/:id",itemController.getItemsByGenre);
 app.post("/item", itemController.addItem);
 app.delete("/item/:id", itemController.deleteItem);
 app.put("/item/:id", itemController.updateItem);
