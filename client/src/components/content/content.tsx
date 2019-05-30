@@ -1,13 +1,17 @@
 import * as React from "react";
-import Categorys from "../category";
+import Categories from "../categories";
 
-export default class Content extends React.Component{
+interface IContent extends React.Props<any>{
+    onClickCategory : any;
+}
+
+export default class Content extends React.Component<IContent>{
     render(){
         return(
             <div className="uk-container">
                 <hr></hr>
                 <p className="uk-text-large">Choose your genre</p>
-                <Categorys/>
+                <Categories onClickCategory={this.props.onClickCategory}/>
             </div>
         )
     }
