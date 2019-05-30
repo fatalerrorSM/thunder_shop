@@ -3,6 +3,8 @@ import { default as Item } from "../models/Item";
 import { Category } from "../models/Category";
 
 export let getAllItems = (req: Request, res: Response) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   Item.find()
     .then((items: any) => {
       if (!items) {
@@ -16,7 +18,23 @@ export let getAllItems = (req: Request, res: Response) => {
     });
 };
 
+export let getItemsByGenre = (req:Request,res:Response) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  
+  Item.find({genre : req.params.id}).then((items : any) => {
+    if(!items){
+      return res.status(404).send(`Items with genre id ${req.params.id} not found`);
+    }else{
+      return res.status(200).json(items);
+    }
+  })
+
+}
+
 export let getItem = (req: Request, res: Response) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   if (req.params.id) {
     Item.findById(req.params.id)
       .then((foundItem: any) => {

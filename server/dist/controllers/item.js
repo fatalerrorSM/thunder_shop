@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Item_1 = __importDefault(require("../models/Item"));
 const Category_1 = require("../models/Category");
 exports.getAllItems = (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     Item_1.default.find()
         .then((items) => {
         if (!items) {
@@ -19,7 +21,21 @@ exports.getAllItems = (req, res) => {
         console.error(err.message);
     });
 };
+exports.getItemsByGenre = (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    Item_1.default.find({ genre: req.params.id }).then((items) => {
+        if (!items) {
+            return res.status(404).send(`Items with genre id ${req.params.id} not found`);
+        }
+        else {
+            return res.status(200).json(items);
+        }
+    });
+};
 exports.getItem = (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     if (req.params.id) {
         Item_1.default.findById(req.params.id)
             .then((foundItem) => {
