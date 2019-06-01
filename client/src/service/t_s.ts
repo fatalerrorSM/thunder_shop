@@ -10,13 +10,13 @@ class TScontorller {
 
   getItemsByGenre = async (genreID: string) => {
     const res: any = await this.getRes(
-      `${this._baseApi}/items-by-genre/${genreID}`
+      `${this._baseApi}/item-by-genre/${genreID}`
     );
     return res.map(this._transformItems);
   };
 
   getItem = async (id: string) => {
-    const res: any = await this.getRes(`${this._baseApi}/items/${id}`);
+    const res: any = await this.getRes(`${this._baseApi}/item/${id}`);
     return res;
   };
 
@@ -25,7 +25,8 @@ class TScontorller {
       id: item._id,
       name: item.name,
       price: item.price,
-      discount: item.discount
+      discount: item.discount,
+      image : item.image
     };
   };
 
