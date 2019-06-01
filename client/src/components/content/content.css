@@ -1,0 +1,30 @@
+p {
+  font-family: "Poiret One", cursive;
+}
+
+.back{
+    position: relative;
+    top : 30px;
+    font-size: 18px;
+    color : #AFAFAF;
+}
+
+.front{
+    position: relative;
+    top : 30px;
+    left : 110px;
+    font-size: 18px;
+    color : #AFAFAF;
+}
+
+.back:hover{
+    color: #4B4B4C;
+}
+
+.front:hover{
+    color: #4B4B4C;
+}
+
+.choose{
+    font-size : 32px;
+}
