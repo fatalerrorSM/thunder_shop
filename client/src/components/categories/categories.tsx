@@ -1,6 +1,8 @@
 import * as React from "react";
 import CategoryItem from "../category-item";
+import Spinner from "../spinner";
 import TScontroler from "../../service/t_s";
+
 
 interface ICategory {
   id: string;
@@ -10,20 +12,10 @@ interface ICategory {
 
 interface ICategoryProps extends React.Props<any>{
   onClickCategory : any;
+  sCategories : any;
 }
 
 export default class Categories extends React.Component<ICategoryProps>{
-  tsController = new TScontroler();
-
-  state = {
-    loading: true,
-    sCategories: []
-  };
-
-  loadCategories = this.tsController.getCategories().then((result: any) => {
-    this.setState({ sCategories: result });
-  });
-
   createCategories = (res : any) => {
     return res.map((category: ICategory) => {
       return (
@@ -35,7 +27,8 @@ export default class Categories extends React.Component<ICategoryProps>{
   };
 
   render() {
-    const categories = this.createCategories(this.state.sCategories);
+    const categories = this.createCategories(this.props.sCategories);
+    
     return (
       <div
         className="uk-text-center uk-child-width-1-3 uk-grid-match"
