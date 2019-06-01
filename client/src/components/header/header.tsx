@@ -7,7 +7,7 @@ export default class Header extends React.Component {
     return (
     <div className="uk-container">
         
-        <nav className="uk-navbar-container" uk-navbar="true">
+        <nav className="uk-background-default" uk-navbar="true">
             <div className="uk-navbar-left">
                 <ul className="uk-navbar-nav">
                     <li className="">
