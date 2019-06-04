@@ -2,29 +2,29 @@ p {
   font-family: "Poiret One", cursive;
 }
 
-.back{
-    position: relative;
-    top : 30px;
-    font-size: 18px;
-    color : #AFAFAF;
+.back {
+  position: relative;
+  top: 30px;
+  font-size: 18px;
+  color: #afafaf;
 }
 
-.front{
-    position: relative;
-    top : 30px;
-    left : 110px;
-    font-size: 18px;
-    color : #AFAFAF;
+.front {
+  position: relative;
+  top: 30px;
+  left: 110px;
+  font-size: 18px;
+  color: #afafaf;
 }
 
-.back:hover{
-    color: #4B4B4C;
+.back:hover {
+  color: #4b4b4c;
 }
 
-.front:hover{
-    color: #4B4B4C;
+.front:hover {
+  color: #4b4b4c;
 }
 
-.choose{
-    font-size : 32px;
+.choose {
+  font-size: 32px;
 }

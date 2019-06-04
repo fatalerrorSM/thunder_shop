@@ -1,38 +1,38 @@
-.discount{
-    position: relative;
-    font-size: 14px;
-    color:#ff8787;
-    top: -0.5em;
+.discount {
+  position: relative;
+  font-size: 14px;
+  color: #ff8787;
+  top: -0.5em;
 }
 
-.item-name{
-    font-size : 22px;
+.item-name {
+  font-size: 22px;
 }
 
-.price-panel .price{
-    text-decoration: line-through;
+.price-panel .price {
+  text-decoration: line-through;
 }
 
-.price-panel{
-    font-size : 18px;
+.price-panel {
+  font-size: 18px;
 }
 
-.controll-panel .details{
-    position: relative;
-    left : -60px;
+.controll-panel .details {
+  position: relative;
+  left: -60px;
 }
 
-.controll-panel .details:hover{
-    color: #4B4B4C;
+.controll-panel .details:hover {
+  color: #4b4b4c;
 }
 
-.controll-panel .add{
-    position: relative;
-    left : 60px;
+.controll-panel .add {
+  position: relative;
+  left: 60px;
 }
 
-.controll-panel .add:hover{
-    color: green;
+.controll-panel .add:hover {
+  color: green;
 }
 /* .controll-panel .details{
     display: inline-block;

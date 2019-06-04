@@ -26,43 +26,9 @@ class TScontorller {
       name: item.name,
       price: item.price,
       discount: item.discount,
-      image : item.image
+      image: item.image
     };
   };
-
-//   _transformItem = (item: any) => {
-//     return {
-//       id: item._id,
-//       name: item.name,
-//       price: item.price,
-//       discount: item.discount,
-//       releaseDate: item.release_date,
-//       activation: item.activation,
-//       publisher: item.publisher,
-//       language: item.language,
-//       genreID: item.genre,
-//       ageRating: item.age_rating,
-//       os: item.OS,
-//       image: item.image,
-//       description: item.description,
-//       specs: {
-//         min: {
-//           os: item.specification.minimal.os,
-//           processor: item.specification.minimal.processor,
-//           ram: item.specification.minimal.RAM,
-//           gpu: item.specification.minimal.GPU,
-//           disk_space: item.specification.minimal.disk_space
-//         },
-//         max: {
-//           os: item.specification.maximal.os,
-//           processor: item.specification.maximal.processor,
-//           ram: item.specification.maximal.RAM,
-//           gpu: item.specification.maximal.GPU,
-//           disk_space: item.specification.maximal.disk_space
-//         }
-//       }
-//     };
-//   };
 
   getCategories = async () => {
     const res: any = await this.getRes(`${this._baseApi}/categories`);

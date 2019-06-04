@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import "./category-item.css"
+import "./category-item.css";
 
 interface ICategoryItem extends React.Props<any> {
   name: string;
@@ -14,7 +14,9 @@ export default class CategoryItem extends React.Component<ICategoryItem> {
         <div className="uk-card-media-top">
           <img src={this.props.image} alt="" />
         </div>
-        <div className="uk-card-body"><div className="name">{this.props.name}</div></div>
+        <div className="uk-card-body">
+          <div className="name">{this.props.name}</div>
+        </div>
       </div>
     );
   }
