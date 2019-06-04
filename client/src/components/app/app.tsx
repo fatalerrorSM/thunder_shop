@@ -4,7 +4,6 @@ import Content from "../content";
 import Footer from "../footer";
 import Spinner from "../spinner";
 import TScontroler from "../../service/t_s";
-import { any } from "prop-types";
 
 export default class App extends React.Component {
   tsController = new TScontroler();
@@ -18,9 +17,14 @@ export default class App extends React.Component {
     itemsView: false,
     itemsByGenreView: false,
     itemPageView: false,
+    cartView: false,
     sCategories: [],
     sItemsByGenre: [],
     sItemPage: [],
+    inCart: {
+      itemId: Array()
+    },
+    sCart: Array(),
     loading: true
   };
 
@@ -36,9 +40,39 @@ export default class App extends React.Component {
     });
   };
 
+  onClickAddToCart = (id: string) => {
+    if (this.state.inCart.itemId.indexOf(id) === -1) {
+      let tmp = this.state.inCart.itemId;
+      tmp.push(id);
+      this.setState({ inCart: { itemId: tmp } });
+      this.tsController.getItem(id).then((res: any) => {
+        let tmpp = this.state.sCart;
+        tmpp.push(res);
+        this.setState({ sCart: tmpp });
+      });
+    }
+  };
+
+  onClickDeleteFromCart = (id: string) => {
+    if (this.state.inCart.itemId.indexOf(id) !== -1) {
+      let temp = this.state.inCart.itemId.filter(element => {
+        return element !== id;
+      });
+      this.setState({ inCart: { itemId: temp } });
+
+      let tempp = this.state.sCart.filter(elem => {
+        return elem._id !== id;
+      });
+
+      this.setState({ sCart: tempp });
+    }
+  };
+
   onClickBackToCategories = () => {
     this.setState({
       itemsByGenreView: false,
+      itemPageView: false,
+      cartView: false,
       categoriesView: true
     });
   };
@@ -52,6 +86,15 @@ export default class App extends React.Component {
         itemPageView: true,
         loading: false
       });
+    });
+  };
+
+  onClickOpenCart = () => {
+    this.setState({
+      itemsByGenreView: false,
+      itemPageView: false,
+      categoriesView: false,
+      cartView: true
     });
   };
 
@@ -73,24 +116,48 @@ export default class App extends React.Component {
     const contentItemsByGenre =
       !this.state.loading && this.state.itemsByGenreView ? (
         <Content
+          cart={this.state.inCart}
           sItemsByGenre={this.state.sItemsByGenre}
           viewItemsByGenre={this.state.itemsByGenreView}
           onClickBackToCategories={this.onClickBackToCategories}
           onItemClick={this.onItemClick}
+          onClickAddToCart={this.onClickAddToCart}
+          onClickDeleteFromCart={this.onClickDeleteFromCart}
+          onClickOpenCart={this.onClickOpenCart}
         />
       ) : null;
     const contentItemPage =
       !this.state.loading && this.state.itemPageView ? (
-        <Content sItemPage={this.state.sItemPage} viewItemPage={this.state.itemPageView} />
+        <Content
+          cart={this.state.inCart}
+          sItemPage={this.state.sItemPage}
+          viewItemPage={this.state.itemPageView}
+          onClickBackToCategories={this.onClickBackToCategories}
+          onClickAddToCart={this.onClickAddToCart}
+          onClickDeleteFromCart={this.onClickDeleteFromCart}
+          onClickOpenCart={this.onClickOpenCart}
+        />
       ) : null;
-
+    const contentCart =
+      !this.state.loading && this.state.cartView ? (
+        <Content
+          sCart={this.state.sCart}
+          cart={this.state.inCart}
+          viewCartPage={this.state.cartView}
+          onClickBackToCategories={this.onClickBackToCategories}
+        />
+      ) : null;
     return (
       <div>
-        <Header />
+        <Header
+          cart_length={this.state.inCart.itemId.length}
+          onClickOpenCart={this.onClickOpenCart}
+        />
         {spinner}
         {contentGenres}
         {contentItemsByGenre}
         {contentItemPage}
+        {contentCart}
         <Footer />
       </div>
     );
