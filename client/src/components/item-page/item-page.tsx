@@ -5,6 +5,10 @@ import "./item-page.css";
 interface IItemPage extends React.Props<any> {
   sItemPage: any;
   onClickBackToCategories: any;
+  onClickAddToCart: any;
+  onClickDeleteFromCart: any;
+  onClickOpenCart: any;
+  cart: any;
 }
 
 export default class ItemPage extends React.Component<IItemPage> {
@@ -30,11 +34,34 @@ export default class ItemPage extends React.Component<IItemPage> {
       </a>
     );
     const toCart = (
-      <a className="to-cart">
+      <a className="to-cart" onClick={() => this.props.onClickOpenCart()}>
         To cart
         <span uk-icon="icon: arrow-right; ratio: 1.5" />
       </a>
     );
+
+    const inCart =
+      this.props.cart.itemId.indexOf(this.props.sItemPage._id) === -1
+        ? false
+        : true;
+    const addToCart = !inCart ? (
+      <button
+        onClick={() => this.props.onClickAddToCart(this.props.sItemPage._id)}
+        className="uk-button uk-button-default"
+      >
+        <span uk-icon="icon: plus-circle;" /> Add to cart
+      </button>
+    ) : null;
+    const deleteFromCart = inCart ? (
+      <button
+        onClick={() =>
+          this.props.onClickDeleteFromCart(this.props.sItemPage._id)
+        }
+        className="uk-button uk-button-default"
+      >
+        <span uk-icon="icon: minus-circle;" /> Delete from cart
+      </button>
+    ) : null;
 
     return (
       <div className="uk-container">
@@ -69,9 +96,7 @@ export default class ItemPage extends React.Component<IItemPage> {
               Operation System: {this.props.sItemPage.OS}
             </div>
             <div className="add-to-cart">
-              <button className="uk-button uk-button-default">
-                <span uk-icon="icon: plus;" /> add to cart
-              </button>
+              {addToCart} {deleteFromCart}
             </div>
           </div>
 
@@ -122,7 +147,7 @@ export default class ItemPage extends React.Component<IItemPage> {
           </div>
         </div>
         <div className="panel">
-            {backToCategories} {toCart}
+          {backToCategories} {toCart}
         </div>
       </div>
     );
