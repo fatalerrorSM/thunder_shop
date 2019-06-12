@@ -25,6 +25,7 @@ export default class App extends React.Component {
       itemId: Array()
     },
     sCart: Array(),
+    totalPrice: Number(),
     loading: true
   };
 
@@ -40,6 +41,42 @@ export default class App extends React.Component {
     });
   };
 
+  getTotalCartPrice = (id: any) => {
+    this.tsController.getItem(id).then(res => {
+      let temp: number = this.state.totalPrice;
+      if (res.discount) {
+        const discount_price =
+          parseFloat(res.price) - (parseFloat(res.price) * res.discount) / 100;
+        temp += discount_price;
+        this.setState({ totalPrice: temp });
+        console.log(this.state.totalPrice);
+      } else {
+        const price = parseFloat(res.price);
+        temp += price;
+        this.setState({ totalPrice: temp });
+        console.log(this.state.totalPrice);
+      }
+    });
+  };
+
+  minusFromTotalPrice = (id: any) => {
+    this.tsController.getItem(id).then(res => {
+      let temp: number = this.state.totalPrice;
+      if (res.discount) {
+        const discount_price =
+          parseFloat(res.price) - (parseFloat(res.price) * res.discount) / 100;
+        temp -= discount_price;
+        this.setState({ totalPrice: temp });
+        console.log(this.state.totalPrice);
+      } else {
+        const price = parseFloat(res.price);
+        temp -= price;
+        this.setState({ totalPrice: temp });
+        console.log(this.state.totalPrice);
+      }
+    });
+  };
+
   onClickAddToCart = (id: string) => {
     if (this.state.inCart.itemId.indexOf(id) === -1) {
       let tmp = this.state.inCart.itemId;
@@ -50,6 +87,7 @@ export default class App extends React.Component {
         tmpp.push(res);
         this.setState({ sCart: tmpp });
       });
+      this.getTotalCartPrice(id);
     }
   };
 
@@ -65,6 +103,7 @@ export default class App extends React.Component {
       });
 
       this.setState({ sCart: tempp });
+      this.minusFromTotalPrice(id);
     }
   };
 
@@ -96,6 +135,25 @@ export default class App extends React.Component {
       categoriesView: false,
       cartView: true
     });
+  };
+
+  orderCreate = (body: any) => {
+    let temp = Array();
+    for (let i = 0; i < this.state.sCart.length; i++) {
+      temp.push(this.state.sCart[i].name);
+      if (i === this.state.sCart.length - 1) {
+        body.customer_order = temp;
+        this.tsController.createOrder(body).then((res: any) => {
+          console.log(res, "Order created");
+        });
+        let clearSCart = this.state.sCart;
+        clearSCart = clearSCart.splice(0, clearSCart.length);
+        let clearInCart = this.state.inCart.itemId;
+        clearInCart = clearInCart.splice(0, clearInCart.length);
+        this.setState({ inCart: { itemId: [] } });
+        this.setState({ totalPrice: 0 });
+      }
+    }
   };
 
   loadCategories = () =>
@@ -143,8 +201,11 @@ export default class App extends React.Component {
         <Content
           sCart={this.state.sCart}
           cart={this.state.inCart}
+          totalPrice={this.state.totalPrice}
           viewCartPage={this.state.cartView}
           onClickBackToCategories={this.onClickBackToCategories}
+          onClickDeleteFromCart={this.onClickDeleteFromCart}
+          orderCreate={this.orderCreate}
         />
       ) : null;
     return (
@@ -152,6 +213,7 @@ export default class App extends React.Component {
         <Header
           cart_length={this.state.inCart.itemId.length}
           onClickOpenCart={this.onClickOpenCart}
+          onClickBackToCategories={this.onClickBackToCategories}
         />
         {spinner}
         {contentGenres}
