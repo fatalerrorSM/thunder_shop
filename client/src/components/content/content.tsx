@@ -23,6 +23,8 @@ interface IContent extends React.Props<any> {
   onClickAddToCart?: any;
   cart?: any;
   onClickDeleteFromCart?: any;
+  totalPrice?: any;
+  orderCreate?: any;
 }
 
 export default class Content extends React.Component<IContent> {
@@ -54,7 +56,13 @@ export default class Content extends React.Component<IContent> {
       />
     ) : null;
     const cartPage = this.props.viewCartPage ? (
-      <Cart cart={this.props.cart} sCart={this.props.sCart} />
+      <Cart
+        cart={this.props.cart}
+        sCart={this.props.sCart}
+        totalPrice={this.props.totalPrice}
+        onClickDeleteFromCart={this.props.onClickDeleteFromCart}
+        orderCreate={this.props.orderCreate}
+      />
     ) : null;
     // Common
     const header = this.props.viewCategories ? (
@@ -66,7 +74,8 @@ export default class Content extends React.Component<IContent> {
           className="back"
           onClick={() => this.props.onClickBackToCategories()}
         >
-          <span uk-icon="icon: arrow-left; ratio: 1.5" />Back to categories
+          <span uk-icon="icon: arrow-left; ratio: 1.5" />
+          Back to categories
         </a>
       ) : null;
     const toCart =
