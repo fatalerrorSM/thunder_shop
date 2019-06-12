@@ -1,0 +1,15 @@
+.cart-list .discount {
+  position: relative;
+  font-size: 14px;
+  color: #ff8787;
+  top: -0.5em;
+}
+
+.price {
+  text-decoration: line-through;
+}
+
+.cart-list .divider {
+  max-height: 40px;
+  margin-left: 10px;
+}
