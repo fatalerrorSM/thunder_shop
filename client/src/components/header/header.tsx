@@ -5,6 +5,7 @@ import "./header.css";
 interface IHeader extends React.Props<any> {
   cart_length: number;
   onClickOpenCart: any;
+  onClickBackToCategories: any;
 }
 
 export default class Header extends React.Component<IHeader> {
@@ -16,15 +17,13 @@ export default class Header extends React.Component<IHeader> {
           <div className="uk-navbar-left">
             <ul className="uk-navbar-nav">
               <li className="">
-                <a href="#">
-                  <span uk-icon="home" />Home
+                <a onClick={() => this.props.onClickBackToCategories()}>
+                  <span uk-icon="home" />
+                  Home
                 </a>
               </li>
               <li>
-                <a href="#">Products</a>
-              </li>
-              <li>
-                <a href="#">About us</a>
+                <a>About us</a>
               </li>
               <li />
             </ul>
