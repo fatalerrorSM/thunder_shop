@@ -63,6 +63,11 @@ app.use(express_session_1.default({
         autoReconnect: true
     })
 }));
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    next();
+});
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 // Access to css,images,and other files
