@@ -1,10 +1,32 @@
 import ky from "ky";
+import got from "got";
+
+interface IOrder {
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email_adress: string;
+  customer_phone_number: string;
+  order_price: number;
+  customer_order: any;
+}
 
 class TScontorller {
   _baseApi = "http://localhost:5000";
 
   getRes = async (url: string) => {
     const res = await ky(url).json();
+    return res;
+  };
+
+  postRes = async (url: string, bodyP: any) => {
+    const res: any = ky
+      .post(`${url}`, {
+        body: JSON.stringify(bodyP),
+        headers: {
+          "Content-type": "application/json"
+        }
+      })
+      .json();
     return res;
   };
 
@@ -20,16 +42,6 @@ class TScontorller {
     return res;
   };
 
-  _transformItems = (item: any) => {
-    return {
-      id: item._id,
-      name: item.name,
-      price: item.price,
-      discount: item.discount,
-      image: item.image
-    };
-  };
-
   getCategories = async () => {
     const res: any = await this.getRes(`${this._baseApi}/categories`);
     return res.map(this._transformCategory);
@@ -40,6 +52,11 @@ class TScontorller {
     return res;
   };
 
+  createOrder = async (body: IOrder) => {
+    const res: any = await this.postRes(`${this._baseApi}/orders`, body);
+    return res;
+  };
+
   _transformCategory(category: any) {
     return {
       id: category._id,
@@ -47,6 +64,16 @@ class TScontorller {
       image: category.image
     };
   }
+
+  _transformItems = (item: any) => {
+    return {
+      id: item._id,
+      name: item.name,
+      price: item.price,
+      discount: item.discount,
+      image: item.image
+    };
+  };
 }
 
 export default TScontorller;
