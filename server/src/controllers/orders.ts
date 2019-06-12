@@ -65,13 +65,13 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
 
   Statistic.findOne({ MONTHS: date.Month })
     .then((result: any) => {
-      let tempReqPrice = req.body.order_price.split("$");
+      let tempReqPrice = parseInt(req.body.order_price);
       if (!result) {
         const stats = new Statistic({
           DAY: date.Day,
           MONTHS: date.Month,
           YEAR: date.Year,
-          price: tempReqPrice[0]
+          price: tempReqPrice
         });
 
         stats.save(err => {
@@ -81,9 +81,9 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
         });
       } else {
         let tempPrice = result.price;
-        let tempReqPrice = req.body.order_price.split("$");
+        let tempReqPrice = parseInt(req.body.order_price);
         let resPrice = 0;
-        resPrice = parseInt(tempPrice) + parseInt(tempReqPrice[0]);
+        resPrice = parseInt(tempPrice) + tempReqPrice;
         Statistic.findOneAndUpdate({MONTHS : date.Month}, {
           DAY : date.Day,
           price : resPrice
@@ -114,7 +114,7 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
       order.customer_last_name
     },thank you for your order -> ${order.customer_order}.To pay - ${
       order.price
-    }. ${order.order_status}`
+    }$. ${order.order_status}`
   };
 
   order.save(err => {

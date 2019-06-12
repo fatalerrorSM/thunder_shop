@@ -59,13 +59,13 @@ exports.addOrder = (req, res, next) => {
     const date = getDate();
     Statistic_1.default.findOne({ MONTHS: date.Month })
         .then((result) => {
-        let tempReqPrice = req.body.order_price.split("$");
+        let tempReqPrice = parseInt(req.body.order_price);
         if (!result) {
             const stats = new Statistic_1.default({
                 DAY: date.Day,
                 MONTHS: date.Month,
                 YEAR: date.Year,
-                price: tempReqPrice[0]
+                price: tempReqPrice
             });
             stats.save(err => {
                 if (err) {
@@ -75,9 +75,9 @@ exports.addOrder = (req, res, next) => {
         }
         else {
             let tempPrice = result.price;
-            let tempReqPrice = req.body.order_price.split("$");
+            let tempReqPrice = parseInt(req.body.order_price);
             let resPrice = 0;
-            resPrice = parseInt(tempPrice) + parseInt(tempReqPrice[0]);
+            resPrice = parseInt(tempPrice) + tempReqPrice;
             Statistic_1.default.findOneAndUpdate({ MONTHS: date.Month }, {
                 DAY: date.Day,
                 price: resPrice
@@ -102,7 +102,7 @@ exports.addOrder = (req, res, next) => {
         from: process.env.EMAIL,
         to: req.body.customer_email_adress,
         subject: "Thunder Shop",
-        text: `Hello ${order.customer_first_name} ${order.customer_last_name},thank you for your order -> ${order.customer_order}.To pay - ${order.price}. ${order.order_status}`
+        text: `Hello ${order.customer_first_name} ${order.customer_last_name},thank you for your order -> ${order.customer_order}.To pay - ${order.price}$. ${order.order_status}`
     };
     order.save(err => {
         if (err) {
