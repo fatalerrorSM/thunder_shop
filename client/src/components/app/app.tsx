@@ -17,6 +17,7 @@ export default class App extends React.Component {
     itemsView: false,
     itemsByGenreView: false,
     itemPageView: false,
+    aboutUsPageView: false,
     cartView: false,
     sCategories: [],
     sItemsByGenre: [],
@@ -35,6 +36,7 @@ export default class App extends React.Component {
       this.setState({
         sItemsByGenre: res,
         categoriesView: false,
+        aboutUsPageView: false,
         itemsByGenreView: true,
         loading: false
       });
@@ -49,12 +51,10 @@ export default class App extends React.Component {
           parseFloat(res.price) - (parseFloat(res.price) * res.discount) / 100;
         temp += discount_price;
         this.setState({ totalPrice: temp });
-        console.log(this.state.totalPrice);
       } else {
         const price = parseFloat(res.price);
         temp += price;
         this.setState({ totalPrice: temp });
-        console.log(this.state.totalPrice);
       }
     });
   };
@@ -67,12 +67,10 @@ export default class App extends React.Component {
           parseFloat(res.price) - (parseFloat(res.price) * res.discount) / 100;
         temp -= discount_price;
         this.setState({ totalPrice: temp });
-        console.log(this.state.totalPrice);
       } else {
         const price = parseFloat(res.price);
         temp -= price;
         this.setState({ totalPrice: temp });
-        console.log(this.state.totalPrice);
       }
     });
   };
@@ -112,7 +110,18 @@ export default class App extends React.Component {
       itemsByGenreView: false,
       itemPageView: false,
       cartView: false,
+      aboutUsPageView: false,
       categoriesView: true
+    });
+  };
+
+  onClickOpenAboutUs = () => {
+    this.setState({
+      itemsByGenreView: false,
+      itemPageView: false,
+      cartView: false,
+      categoriesView: false,
+      aboutUsPageView: true
     });
   };
 
@@ -122,6 +131,7 @@ export default class App extends React.Component {
       this.setState({
         sItemPage: res,
         itemsByGenreView: false,
+        aboutUsPageView: false,
         itemPageView: true,
         loading: false
       });
@@ -133,6 +143,7 @@ export default class App extends React.Component {
       itemsByGenreView: false,
       itemPageView: false,
       categoriesView: false,
+      aboutUsPageView: false,
       cartView: true
     });
   };
@@ -143,9 +154,7 @@ export default class App extends React.Component {
       temp.push(this.state.sCart[i].name);
       if (i === this.state.sCart.length - 1) {
         body.customer_order = temp;
-        this.tsController.createOrder(body).then((res: any) => {
-          console.log(res, "Order created");
-        });
+        this.tsController.createOrder(body).then((res: any) => {});
         let clearSCart = this.state.sCart;
         clearSCart = clearSCart.splice(0, clearSCart.length);
         let clearInCart = this.state.inCart.itemId;
@@ -208,18 +217,21 @@ export default class App extends React.Component {
           orderCreate={this.orderCreate}
         />
       ) : null;
+
     return (
       <div>
         <Header
           cart_length={this.state.inCart.itemId.length}
           onClickOpenCart={this.onClickOpenCart}
           onClickBackToCategories={this.onClickBackToCategories}
+          onClickOpenAboutUs={this.onClickOpenAboutUs}
         />
         {spinner}
         {contentGenres}
         {contentItemsByGenre}
         {contentItemPage}
         {contentCart}
+
         <Footer />
       </div>
     );

@@ -41,6 +41,7 @@ export default class Cart extends React.Component<ICart> {
       });
     } else {
       this.setState({
+        name: e.target.value,
         fieldNameClassName: "uk-form-danger"
       });
     }
@@ -54,6 +55,7 @@ export default class Cart extends React.Component<ICart> {
       });
     } else {
       this.setState({
+        lastName: e.target.value,
         fieldLastNameClassName: "uk-form-danger"
       });
     }
@@ -71,6 +73,7 @@ export default class Cart extends React.Component<ICart> {
       });
     } else {
       this.setState({
+        email: e.target.value,
         fieldEmailClassName: "uk-form-danger"
       });
     }
@@ -84,6 +87,7 @@ export default class Cart extends React.Component<ICart> {
       });
     } else {
       this.setState({
+        phoneNumber: e.target.value,
         fieldPhoneClassName: "uk-form-danger"
       });
     }

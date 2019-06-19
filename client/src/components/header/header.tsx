@@ -6,6 +6,7 @@ interface IHeader extends React.Props<any> {
   cart_length: number;
   onClickOpenCart: any;
   onClickBackToCategories: any;
+  onClickOpenAboutUs: any;
 }
 
 export default class Header extends React.Component<IHeader> {
@@ -21,9 +22,6 @@ export default class Header extends React.Component<IHeader> {
                   <span uk-icon="home" />
                   Home
                 </a>
-              </li>
-              <li>
-                <a>About us</a>
               </li>
               <li />
             </ul>
