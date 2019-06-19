@@ -3,12 +3,12 @@ div.centered
         div.uk-margin
             div.uk-inline
                 span(uk-icon="icon: user").uk-form-icon
-                input(type="text" name="user_name").uk-input
+                input(name="user_name" type="text").uk-input
         div.uk-margin
             div.uk-inline
                 span(uk-icon="icon: lock").uk-form-icon.uk-form-icon-flip
-                input(type="password" name="password").uk-input
-        input(type="Submit",value="Enter",name="enter").uk-button.uk-button-secondary  
+                input(name="password" type="password").uk-input
+        input(name="enter",type="Submit",value="Enter").uk-button.uk-button-secondary  
     case st
         when false
             p(class="uk-text-danger  uk-text-middle")=msg

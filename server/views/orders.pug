@@ -29,20 +29,20 @@ block content
             div.uk-margin
                 label.uk-form-label="ID"
                 div.uk-form-controls
-                    input(type="text" name="id" autocomplete="off" id="input-id").uk-input
+                    input(id="input-id" name="id" type="text" autocomplete="off").uk-input
             div.uk-margin
                 label.uk-form-label="Order status"
                 div.uk-form-controls
-                    input(type="text" name="update_status" autocomplete="off" id="input-update_status").uk-input
+                    input(id="input-update_status" name="update_status" type="text" autocomplete="off").uk-input
             div.uk-child-width-auto.uk-margin
                 label
-                    input(type="radio", id="radio-processed" name="radio" value="processed-radio").uk-radio
+                    input(id="radio-processed", name="radio", type="radio", value="processed-radio").uk-radio
                 | Processed
                 label.uk-margin-left  
-                    input(type="radio",id="radio-shipped", name="radio" value="shipped-radio").uk-radio
+                    input(id="radio-shipped", name="radio", type="radio", value="shipped-radio").uk-radio
                 | Shipped
                 label.uk-margin-left
-                    input(type="radio", id="radio-delivered",name="radio" value="delivered-radio").uk-radio
+                    input(id="radio-delivered", name="radio", type="radio", value="delivered-radio").uk-radio
                 | Delivered
             div.uk-margin
                 input(type="submit", value="Submit").uk-input
@@ -52,7 +52,7 @@ block content
             if(id.length == 24 && id[0]==5){
                 $.ajax({url: `http://localhost:5000/orders/${id}`,success : function(res){
                     jQ_append("input-id",id);
-                    jQ_append("input-update_status",res.order_status)
+                    jQ_append(input-update_status,res.order_status)
                 }})
             }
         })

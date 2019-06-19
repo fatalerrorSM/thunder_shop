@@ -71,14 +71,13 @@ exports.addItem = (req, res, next) => {
     req.assert("maximal_specification").notEmpty();
     const errors = req.validationErrors();
     if (errors) {
-        console.log(errors);
+        console.error(errors);
         return res.status(400).end("Bad Request");
     }
     Category_1.Category.findOne({ name: req.body.genre }).then((category) => {
         Item_1.default.findOne({ name: req.body.name })
             .then((existngItem) => {
             if (existngItem) {
-                console.log("HERE");
                 return res.status(500).send("Item is already exist");
             }
             else {
@@ -87,7 +86,6 @@ exports.addItem = (req, res, next) => {
         })
             .catch((err) => {
             console.error(err);
-            console.log("HERE2");
             res.status(500);
         });
         let min_spec = req.body.minimal_specification.split("\r\n");

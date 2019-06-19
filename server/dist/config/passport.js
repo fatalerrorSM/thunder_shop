@@ -40,7 +40,6 @@ passport_1.default.use(new LocalStrategy({ usernameField: 'user_name', passwordF
     });
 }));
 exports.isAuthenticated = (req, res, next) => {
-    console.log(req.isAuthenticated());
     if (req.isAuthenticated()) {
         return next();
     }
@@ -51,7 +50,6 @@ exports.isAuthenticated = (req, res, next) => {
  */
 exports.isAuthorized = (req, res, next) => {
     const provider = req.path.split("/").slice(-1)[0];
-    console.log(`${provider}`);
     if (lodash_1.default.find(req.user.tokens, { kind: provider })) {
         next();
     }

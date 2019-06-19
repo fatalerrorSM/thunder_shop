@@ -78,7 +78,6 @@ exports.postCategories = (req, res) => {
             break;
         }
         case "update-radio": {
-            console.log(req.body.id);
             if (req.body.id) {
                 const options = {
                     headers: {
@@ -481,7 +480,6 @@ exports.getOrders = (req, res) => {
     });
 };
 exports.postOrders = (req, res) => {
-    console.log(req.body);
     res.redirect("orders");
     if (req.body.id && req.body.radio) {
         switch (req.body.radio) {
@@ -558,6 +556,9 @@ exports.postOrders = (req, res) => {
                     console.error(err.message);
                     res.redirect("orders");
                 });
+                break;
+            }
+            default: {
                 break;
             }
         }

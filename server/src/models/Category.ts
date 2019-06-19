@@ -9,7 +9,7 @@ export type CategoryModel = mongoose.Document & {
 const CategorySchema: Schema = new Schema(
   {
     name: { type: String, required: true, unique: true },
-    image: { type: String, required: true },
+    image: { type: String, required: true }
   },
   {
     timestamps: true

@@ -4,7 +4,10 @@ import { Category } from "../models/Category";
 
 export let getAllItems = (req: Request, res: Response) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   Item.find()
     .then((items: any) => {
       if (!items) {
@@ -18,23 +21,30 @@ export let getAllItems = (req: Request, res: Response) => {
     });
 };
 
-export let getItemsByGenre = (req:Request,res:Response) => {
+export let getItemsByGenre = (req: Request, res: Response) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
-  Item.find({genre : req.params.id}).then((items : any) => {
-    if(!items){
-      return res.status(404).send(`Items with genre id ${req.params.id} not found`);
-    }else{
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+
+  Item.find({ genre: req.params.id }).then((items: any) => {
+    if (!items) {
+      return res
+        .status(404)
+        .send(`Items with genre id ${req.params.id} not found`);
+    } else {
       return res.status(200).json(items);
     }
-  })
-
-}
+  });
+};
 
 export let getItem = (req: Request, res: Response) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   if (req.params.id) {
     Item.findById(req.params.id)
       .then((foundItem: any) => {
@@ -71,7 +81,7 @@ export let addItem = (req: Request, res: Response, next: NextFunction) => {
   const errors = req.validationErrors();
 
   if (errors) {
-    console.log(errors);
+    console.error(errors);
     return res.status(400).end("Bad Request");
   }
 
@@ -79,15 +89,14 @@ export let addItem = (req: Request, res: Response, next: NextFunction) => {
     Item.findOne({ name: req.body.name })
       .then((existngItem: any) => {
         if (existngItem) {
-          console.log("HERE");
           return res.status(500).send("Item is already exist");
-        }else{
+        } else {
           return next();
         }
       })
       .catch((err: Error) => {
         console.error(err);
-        console.log("HERE2");
+
         res.status(500);
       });
 

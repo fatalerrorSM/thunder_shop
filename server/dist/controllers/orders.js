@@ -110,7 +110,7 @@ exports.addOrder = (req, res, next) => {
         }
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log(error);
+                console.error(error);
             }
             else {
                 console.log("Email sent: " + info.response);
@@ -132,7 +132,7 @@ exports.updateOrder = (req, res) => {
             pass: process.env.EMAIL_PASS
         }
     });
-    let order = Order_1.default.findByIdAndUpdate({ _id: req.params.id }, {
+    const order = Order_1.default.findOneAndUpdate({ _id: req.params.id }, {
         order_status: req.body.update_status
     })
         .then((result) => {
@@ -146,11 +146,11 @@ exports.updateOrder = (req, res) => {
                 from: process.env.EMAIL,
                 to: result.customer_email_adress,
                 subject: "Thunder Shop",
-                text: `Hello ${result.customer_first_name} ${result.customer_last_name}.${result.order_status}`
+                text: `Hello ${result.customer_first_name} ${result.customer_last_name}.${req.body.update_status}`
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    console.log(error);
+                    console.error(error);
                 }
                 else {
                     console.log("Email sent: " + info.response);

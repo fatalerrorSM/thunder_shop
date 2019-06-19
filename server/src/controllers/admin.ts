@@ -83,7 +83,6 @@ export let postCategories = (req: Request, res: Response) => {
       break;
     }
     case "update-radio": {
-      console.log(req.body.id);
       if (req.body.id) {
         const options = {
           headers: {
@@ -482,12 +481,12 @@ export let getOrders = (req: Request, res: Response) => {
     } else {
       let formatRes: any = [];
       orders.forEach(order => {
-        if(order.order_status === "Your order is delivered!"){
-          
-        }else{
+        if (order.order_status === "Your order is delivered!") {
+        } else {
           let obj = {
             id: order._id,
-            customer: order.customer_first_name + " " + order.customer_last_name,
+            customer:
+              order.customer_first_name + " " + order.customer_last_name,
             customer_phone: order.customer_phone_number,
             order_: order.customer_order,
             order_price: order.price,
@@ -507,7 +506,6 @@ export let getOrders = (req: Request, res: Response) => {
 };
 
 export let postOrders = (req: Request, res: Response) => {
-  console.log(req.body);
   res.redirect("orders");
   if (req.body.id && req.body.radio) {
     switch (req.body.radio) {
@@ -581,6 +579,9 @@ export let postOrders = (req: Request, res: Response) => {
             console.error(err.message);
             res.redirect("orders");
           });
+        break;
+      }
+      default: {
         break;
       }
     }

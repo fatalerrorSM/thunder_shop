@@ -10,7 +10,7 @@ export type StatisticModel = mongoose.Document & {
 
 const statisticSchema: Schema = new Schema({
   DAY: { type: String, required: true },
-  MONTHS: { type: String, required: true , unique : true},
+  MONTHS: { type: String, required: true, unique: true },
   YEAR: { type: String, required: true },
   price: { type: String }
 });

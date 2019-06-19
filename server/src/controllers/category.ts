@@ -5,7 +5,10 @@ const request = require("express-validator");
 
 export let getAllcategories = (req: Request, res: Response) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   Category.find()
     .then((categories: any) => {
       if (!categories) {
@@ -52,7 +55,10 @@ export let addCategory = (req: Request, res: Response, next: NextFunction) => {
 
 export let getCategory = (req: Request, res: Response) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   let category = Category.findById(req.params.id)
     .then((foundCategory: any) => {
       if (!foundCategory) {
@@ -67,23 +73,33 @@ export let getCategory = (req: Request, res: Response) => {
 };
 
 export let deleteCategory = (req: Request, res: Response) => {
-  let category = Category.findByIdAndDelete({_id : req.params.id}).then((result : any) => {
-    if(!result) {return res.status(500).send(`Can't delete document with id -> ${req.params.id}`)}
-    else{
-      return res.status(200).send(`Document with id -> ${req.params.id} successfully deleted`);
-    }
-  }).catch((err : Error) => {
-    console.error(err.message);
-  })
+  let category = Category.findByIdAndDelete({ _id: req.params.id })
+    .then((result: any) => {
+      if (!result) {
+        return res
+          .status(500)
+          .send(`Can't delete document with id -> ${req.params.id}`);
+      } else {
+        return res
+          .status(200)
+          .send(`Document with id -> ${req.params.id} successfully deleted`);
+      }
+    })
+    .catch((err: Error) => {
+      console.error(err.message);
+    });
 };
 
 export let updateCategory = (req: Request, res: Response) => {
   if (!req.body.name && !req.body.image) {
     return res.status(202).send("Object with options for update is empty");
   } else if (req.body.name && !req.body.image) {
-    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
-      name: req.body.name
-    }).then((result: any) => {
+    let category: any = Category.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        name: req.body.name
+      }
+    ).then((result: any) => {
       if (!result) {
         return res
           .status(500)
@@ -97,9 +113,12 @@ export let updateCategory = (req: Request, res: Response) => {
       }
     });
   } else if (!req.body.name && req.body.image) {
-    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
-      image: req.body.image
-    }).then((result: any) => {
+    let category: any = Category.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        image: req.body.image
+      }
+    ).then((result: any) => {
       if (!result) {
         return res
           .status(500)
@@ -113,10 +132,13 @@ export let updateCategory = (req: Request, res: Response) => {
       }
     });
   } else if (req.body.name && req.body.image) {
-    let category: any = Category.findOneAndUpdate({_id : req.params.id}, {
-      name: req.body.name,
-      image: req.body.image
-    }).then((result: any) => {
+    let category: any = Category.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        name: req.body.name,
+        image: req.body.image
+      }
+    ).then((result: any) => {
       if (!result) {
         return res
           .status(500)

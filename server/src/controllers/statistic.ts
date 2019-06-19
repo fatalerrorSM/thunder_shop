@@ -10,4 +10,3 @@ export let getStat = (req: Request, res: Response) => {
     }
   });
 };
-

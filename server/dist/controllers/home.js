@@ -15,12 +15,11 @@ exports.index = (req, res) => {
     }
 };
 exports.postSignIn = (req, res, next) => {
-    console.log(req.body.user_name, req.body.password);
     req.assert("user_name", " is not valid").len({ min: 1 });
     req.assert("password", "Password cannot be blank").notEmpty();
     const errors = req.validationErrors();
     if (errors) {
-        console.log("errors", errors);
+        console.error("errors", errors);
         return res.render("home", {
             st: false,
             msg: "User name or password incorrect"

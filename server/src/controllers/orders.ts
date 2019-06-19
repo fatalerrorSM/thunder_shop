@@ -84,12 +84,15 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
         let tempReqPrice = parseInt(req.body.order_price);
         let resPrice = 0;
         resPrice = parseInt(tempPrice) + tempReqPrice;
-        Statistic.findOneAndUpdate({MONTHS : date.Month}, {
-          DAY : date.Day,
-          price : resPrice
-        }).catch((err : Error) => {
+        Statistic.findOneAndUpdate(
+          { MONTHS: date.Month },
+          {
+            DAY: date.Day,
+            price: resPrice
+          }
+        ).catch((err: Error) => {
           console.error(err.message);
-        })
+        });
       }
     })
     .catch((err: Error) => {
@@ -123,7 +126,7 @@ export let addOrder = (req: Request, res: Response, next: NextFunction) => {
     }
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
+        console.error(error);
       } else {
         console.log("Email sent: " + info.response);
       }
@@ -149,7 +152,7 @@ export let updateOrder = (req: Request, res: Response) => {
     }
   });
 
-  let order: any = Order.findByIdAndUpdate(
+  const order: any = Order.findOneAndUpdate(
     { _id: req.params.id },
     {
       order_status: req.body.update_status
@@ -171,11 +174,11 @@ export let updateOrder = (req: Request, res: Response) => {
           subject: "Thunder Shop",
           text: `Hello ${result.customer_first_name} ${
             result.customer_last_name
-          }.${result.order_status}`
+          }.${req.body.update_status}`
         };
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
-            console.log(error);
+            console.error(error);
           } else {
             console.log("Email sent: " + info.response);
           }

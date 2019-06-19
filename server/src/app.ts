@@ -63,11 +63,11 @@ app.use(
     })
   })
 );
-app.use(function (req,res,next){
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', '*');
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   next();
-})
+});
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -92,14 +92,14 @@ app.delete("/categories/:id", categoriesController.deleteCategory);
 // Items Zone
 app.get("/items", itemController.getAllItems);
 app.get("/item/:id", itemController.getItem);
-app.get("/item-by-genre/:id",itemController.getItemsByGenre);
+app.get("/item-by-genre/:id", itemController.getItemsByGenre);
 app.post("/item", itemController.addItem);
 app.delete("/item/:id", itemController.deleteItem);
 app.put("/item/:id", itemController.updateItem);
 
 // Statistic Zone
 
-app.get("/stats",statisticController.getStat);
+app.get("/stats", statisticController.getStat);
 
 // Orders Zone
 app.get("/orders", orderController.getAllOrders);
@@ -123,7 +123,6 @@ app.post(
   passportConfig.isAuthenticated,
   adminController.postOrders
 );
-
 
 app.get(
   "/admin/categories",

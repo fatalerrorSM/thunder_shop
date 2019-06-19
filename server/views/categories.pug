@@ -31,22 +31,22 @@ block content
         form(method="post" uk-grid).uk-grid-small
             div.uk-width-1-1
                 legend="ID"
-                input(type="text" autocomplete="off" name="id" id="input-id").uk-input
+                input(id="input-id" name="id" type="text" autocomplete="off").uk-input
             div.uk-width-1-2
                 legend="Name"
-                input(type="text" autocomplete="off" name="name" id="input-name").uk-input
+                input(id="input-name" name="name" type="text" autocomplete="off").uk-input
             div.uk-width-1-2
                 legend="Image"
-                input(type="text" autocomplete="off" name="image" id="input-image").uk-input
+                input(id="input-image" name="image" type="text" autocomplete="off").uk-input
             div.uk-child-width-auto.uk-margin
                 label
-                    input(type="radio", id="radio-Add" name="radio" value="add-radio").uk-radio
+                    input(id="radio-Add", name="radio", type="radio", value="add-radio").uk-radio
                 | Add
                 label.uk-margin-left  
-                    input(type="radio",id="radio-Update", name="radio" value="update-radio").uk-radio
+                    input(id="radio-Update", name="radio", type="radio", value="update-radio").uk-radio
                 | Update
                 label.uk-margin-left
-                    input(type="radio", id="radio-Delete",name="radio" value="delete-radio").uk-radio
+                    input(id="radio-Delete", name="radio", type="radio", value="delete-radio").uk-radio
                 | Delete
             div.uk-width-1-1
                 input(type="submit", value="Submit").uk-input
