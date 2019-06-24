@@ -16,7 +16,9 @@ else {
 exports.ENVIRONMENT = process.env.NODE_ENV;
 const prod = exports.ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 exports.SESSION_SECRET = process.env.SESSION_SECRET;
-exports.MONGODB_URI = prod ? process.env.MONGODB_URI : process.env.MONGODB_URI_LOCAL;
+exports.MONGODB_URI = prod
+    ? process.env.MONGODB_URI
+    : process.env.MONGODB_URI_LOCAL;
 if (!exports.SESSION_SECRET) {
     console.error("No client secret. Set SESSION_SECRET environment variable.");
     process.exit(1);

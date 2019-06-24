@@ -61,14 +61,20 @@ exports.getCategory = (req, res) => {
     });
 };
 exports.deleteCategory = (req, res) => {
-    let category = Category_1.Category.findByIdAndDelete({ _id: req.params.id }).then((result) => {
+    let category = Category_1.Category.findByIdAndDelete({ _id: req.params.id })
+        .then((result) => {
         if (!result) {
-            return res.status(500).send(`Can't delete document with id -> ${req.params.id}`);
+            return res
+                .status(500)
+                .send(`Can't delete document with id -> ${req.params.id}`);
         }
         else {
-            return res.status(200).send(`Document with id -> ${req.params.id} successfully deleted`);
+            return res
+                .status(200)
+                .send(`Document with id -> ${req.params.id} successfully deleted`);
         }
-    }).catch((err) => {
+    })
+        .catch((err) => {
         console.error(err.message);
     });
 };

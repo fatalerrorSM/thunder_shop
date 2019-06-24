@@ -30,9 +30,12 @@ exports.postSignIn = (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            return res.render("home", { st: false, msg: "User name or password incorrect" });
+            return res.render("home", {
+                st: false,
+                msg: "User name or password incorrect"
+            });
         }
-        req.logIn(user, (err) => {
+        req.logIn(user, err => {
             if (err) {
                 return next(err);
             }

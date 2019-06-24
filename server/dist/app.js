@@ -64,8 +64,8 @@ app.use(express_session_1.default({
     })
 }));
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "*");
     next();
 });
 app.use(passport_1.default.initialize());

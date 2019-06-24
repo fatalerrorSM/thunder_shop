@@ -18,24 +18,27 @@ passport_1.default.deserializeUser((id, done) => {
 });
 /**
  * Sign in using Username and Password.
-*/
-passport_1.default.use(new LocalStrategy({ usernameField: 'user_name', passwordField: 'password' }, (usernameField, passwordField, done) => {
+ */
+passport_1.default.use(new LocalStrategy({ usernameField: "user_name", passwordField: "password" }, (usernameField, passwordField, done) => {
     Admin_1.default.findOne({ user_name: usernameField.toLocaleLowerCase() }, (err, user) => {
         if (err) {
             return done(err);
         }
         if (!user) {
-            return done(undefined, false, { message: `${usernameField} not found.` });
+            return done(undefined, false, {
+                message: `${usernameField} not found.`
+            });
         }
         user.verifyPassword(passwordField, (err, isMatch) => {
             if (err) {
                 return done(err);
             }
-            ;
             if (isMatch) {
                 return done(undefined, user);
             }
-            return done(undefined, false, { message: "Invalid username or password." });
+            return done(undefined, false, {
+                message: "Invalid username or password."
+            });
         });
     });
 }));

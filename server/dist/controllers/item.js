@@ -26,7 +26,9 @@ exports.getItemsByGenre = (req, res) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     Item_1.default.find({ genre: req.params.id }).then((items) => {
         if (!items) {
-            return res.status(404).send(`Items with genre id ${req.params.id} not found`);
+            return res
+                .status(404)
+                .send(`Items with genre id ${req.params.id} not found`);
         }
         else {
             return res.status(200).json(items);
@@ -174,7 +176,7 @@ exports.updateItem = (req, res) => {
         let max_spec = req.body.maximal_specification.split("\r\n");
         Category_1.Category.findOne({ name: req.body.genre })
             .then((result) => {
-            let item = Item_1.default.findOneAndUpdate(req.params.id, {
+            let item = Item_1.default.findOneAndUpdate({ _id: req.params.id }, {
                 name: req.body.name,
                 price: req.body.price,
                 discount: req.body.discount,

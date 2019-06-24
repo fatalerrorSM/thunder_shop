@@ -188,7 +188,7 @@ export let updateItem = (req: Request, res: Response) => {
 
     Category.findOne({ name: req.body.genre })
       .then((result: any) => {
-        let item: any = Item.findOneAndUpdate(req.params.id, {
+        let item: any = Item.findOneAndUpdate({_id : req.params.id}, {
           name: req.body.name,
           price: req.body.price,
           discount: req.body.discount,

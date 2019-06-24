@@ -444,6 +444,7 @@ export let postItem = (req: Request, res: Response) => {
       } else {
         return res.redirect("items");
       }
+      break;
     }
     case "delete-radio": {
       if (req.body.id) {
