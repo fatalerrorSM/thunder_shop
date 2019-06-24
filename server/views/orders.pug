@@ -52,7 +52,7 @@ block content
             if(id.length == 24 && id[0]==5){
                 $.ajax({url: `http://localhost:5000/orders/${id}`,success : function(res){
                     jQ_append("input-id",id);
-                    jQ_append(input-update_status,res.order_status)
+                    jQ_append("input-update_status",res.order_status)
                 }})
             }
         })
